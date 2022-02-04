@@ -44,6 +44,10 @@ Next, go to the project data directory and install the dependencies using the co
 
 Then create in the project root directory a settings file `.env` by copying it from `.env.example` and edit the necessary options in it, such as database connection settings.
 
+Generate your application key with the command:
+
+    $ php artisan key:generate --ansi
+
 Perform database migrations to create the initial database tables structure:
 
     $ php artisan migrate 
