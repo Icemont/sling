@@ -22,10 +22,13 @@ This application will be useful for businesses and individuals with a similar ta
 
 Screenshots of the deployed app are available [here](https://github.com/Icemont/sling-docs/tree/main/assets/screenshots).
 
+Sling page on the developer's website: [https://icemont.dev/my-scripts/sling](https://icemont.dev/my-scripts/sling)
+
 ## Features
 - Client Accounting.
 - Separate invoice number prefix for each customer with the ability to set the initial number index.
 - Generate invoices & Download invoices as PDF.
+- Invoicing model: "one invoice = one service"
 - One main currency for accounting with the ability to invoice in other currencies. If the invoice is billed in a non-primary currency, it is possible to get an exchange rate from an exchange rate provider for the invoice payment date. At the moment only exchange rate provider for GEL (Georgian Lari) is available, but providers for other currencies can be easily added.
 - Unlimited number of payment methods can be created. Different payment method can be selected for each invoice. Information about the selected payment method will be added to the generated invoice.
 - Reports generation for the selected period with grouping by clients.
