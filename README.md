@@ -11,9 +11,10 @@ Sling is based on the Laravel PHP framework.
 1. [About](#about)
 2. [Features](#features)
 3. [Installation](#installation)
-4. [Customization](#customization)
-5. [Roadmap](#roadmap)
-6. [License](#license)
+4. [Installation with Docker](#installation-with-docker)
+5. [Customization](#customization)
+6. [Roadmap](#roadmap)
+7. [License](#license)
 
 ## About
 **Sling** was originally created for personal use, for convenient accounting of income and invoice generation for Individual Entrepreneur with "Small Business" status in Georgia (tax is paid on total revenue every month). 
@@ -68,6 +69,24 @@ Minimized JS and CSS assets are already available in the current repository, but
 
 Initial configuration does not differ from the typical Laravel project configuration, so you can refer to the official [Laravel framework documentation](https://laravel.com/docs/8.x/configuration) in case of difficulties.
 
+## Installation with Docker
+Install Docker on your host by using this guide: [https://docs.docker.com/install/](https://docs.docker.com/install/)
+
+Install Docker Compose by using this guide: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
+
+Clone the project repository:
+
+	$ git clone https://github.com/Icemont/sling.git
+
+Next, go to the project data directory and create in the project root directory a settings file `.env` by copying it from `.env.example` and edit the necessary options in it:
+
+    $ cd sling
+    $ cp .env.example .env
+
+Next, run commands below:
+
+    $ docker-compose up -d
+    $ ./docker-compose/setup.sh
 
 ## Customization
 #### Base settings
