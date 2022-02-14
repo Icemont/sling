@@ -12,7 +12,7 @@ class Kernel extends HttpKernel
      *
      * @var string
      */
-    const VERSION = '0.1.0';
+    const VERSION = '1.0.1';
 
     /**
      * The application's global HTTP middleware stack.
