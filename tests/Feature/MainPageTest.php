@@ -11,8 +11,6 @@ class MainPageTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic test example.
-     *
      * @return void
      */
     public function test_guest_redirected_to_login_page()
@@ -22,23 +20,24 @@ class MainPageTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-
+    /**
+     * @return void
+     */
     public function test_user_with_empty_profile_redirected_to_settings_page()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertRedirect(route('user.settings.edit'));
     }
 
+    /**
+     * @return void
+     */
     public function test_verified_user_with_completed_profile_can_show_dashboard()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-        ]);
+        $user = User::factory()->create();
         $user->upsertAddress([
             'street1' => 'Test',
             'street2' => 'Test',
