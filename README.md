@@ -1,12 +1,12 @@
 <img src="https://raw.githubusercontent.com/Icemont/sling-docs/main/assets/screenshots/sling.png">
 
-## Introduction
-**Sling** - **S**imple **L**aravel **In**voice **G**enerator.
-It's an open-source web application that helps you create invoices and track income.
+## Sling - Simple Laravel Invoice Generator
+[![Tests](https://github.com/Icemont/sling/actions/workflows/laravel.yml/badge.svg?branch=main)](https://github.com/Icemont/sling/actions/workflows/laravel.yml)
+[![GitHub license](https://img.shields.io/github/license/Icemont/sling)](https://github.com/Icemont/sling/blob/main/LICENSE)
 
-Sling is based on the Laravel PHP framework.
+Sling — open-source web application that helps you create invoices and track income.
 
-# Table of Contents
+## Table of Contents
 
 1. [About](#about)
 2. [Features](#features)
@@ -19,7 +19,7 @@ Sling is based on the Laravel PHP framework.
 ## About
 **Sling** was originally created for personal use, for convenient accounting of income and invoice generation for Individual Entrepreneur with "Small Business" status in Georgia (tax is paid on total revenue every month). 
 
-This application will be useful for businesses and individuals with a similar taxation system, or just for generating invoices and income accounting.
+This application will be useful for businesses and individuals with a similar taxation system, or just for generating invoices and income accounting. Sling is based on the Laravel PHP framework.
 
 Screenshots of the deployed app are available [here](https://github.com/Icemont/sling-docs/tree/main/assets/screenshots).
 
