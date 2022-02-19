@@ -12,6 +12,8 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $user;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -34,8 +36,8 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
 
         $response = $middleware->handle($request, fn() => null);
 
-        $this->assertEquals($response->getStatusCode(), 302);
-        $this->assertEquals($response->isRedirect(route('user.settings.edit')), true);
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals(true, $response->isRedirect(route('user.settings.edit')));
     }
 
     /**
@@ -60,6 +62,6 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
 
         $response = $middleware->handle($request, fn() => null);
 
-        $this->assertEquals($response, null);
+        $this->assertEquals(null, $response);
     }
 }
