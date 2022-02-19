@@ -12,6 +12,13 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     /**
      * @return void
      */
@@ -19,16 +26,13 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
     {
         $request = Request::create('/');
 
-        $user = User::factory()->create();
+        $this->user->address()->delete();
 
-        $request->setUserResolver(function () use ($user) {
-            return $user;
-        });
+        $request->setUserResolver(fn() => $this->user);
 
         $middleware = new EnsureProfileIsFilled;
 
-        $response = $middleware->handle($request, function () {
-        });
+        $response = $middleware->handle($request, fn() => null);
 
         $this->assertEquals($response->getStatusCode(), 302);
         $this->assertEquals($response->isRedirect(route('user.settings.edit')), true);
@@ -41,8 +45,7 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
     {
         $request = Request::create('/');
 
-        $user = User::factory()->create();
-        $user->upsertAddress([
+        $this->user->upsertAddress([
             'street1' => 'Test',
             'street2' => 'Test',
             'city' => 'Test',
@@ -51,14 +54,11 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
             'zip' => 'Test',
         ]);
 
-        $request->setUserResolver(function () use ($user) {
-            return $user;
-        });
+        $request->setUserResolver(fn() => $this->user);
 
         $middleware = new EnsureProfileIsFilled;
 
-        $response = $middleware->handle($request, function () {
-        });
+        $response = $middleware->handle($request, fn() => null);
 
         $this->assertEquals($response, null);
     }
