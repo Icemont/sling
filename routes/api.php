@@ -19,5 +19,5 @@ Route::middleware(['auth:sanctum', 'throttle:10,1'])->group(function () {
         ->where([
             'currency' => '[A-Za-z]{3}',
             'date' => '20\d{2}\-\d{2}\-\d{2}'
-        ]);
+        ])->name('api.exchange-rates.get');
 });
