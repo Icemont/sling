@@ -90,4 +90,18 @@ class NBGExchangeRatesServiceTest extends TestCase
 
         $this->assertEquals(1.0, $rate);
     }
+
+    /**
+     * Test NBGExchangeRatesService with bad data
+     *
+     * @return void
+     */
+    public function test_nbg_exchange_rates_service_with_bad_data()
+    {
+        $this->currency->code = 'EUR';
+
+        $rate = $this->service->getExchangeRate($this->currency, $this->date);
+
+        $this->assertEquals(null, $rate);
+    }
 }
