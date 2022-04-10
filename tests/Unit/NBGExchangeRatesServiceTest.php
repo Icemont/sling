@@ -20,24 +20,27 @@ class NBGExchangeRatesServiceTest extends TestCase
 
     private float $test_value = 2.0;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->service = new NBGExchangeRatesService();
         $this->currency = new Currency();
         $this->date = now();
+    }
 
+    protected function setFakeHttpResponse($valid = true): void
+    {
         Http::fake([
             'nbg.gov.ge/*' => Http::response(
                 [[
                     'date' => $this->date->toDateTimeString(),
                     'currencies' => [
-                        [
+                        $valid ? [
                             'code' => 'USD',
                             'quantity' => 1,
                             'rate' => $this->test_value,
-                        ]
+                        ] : []
                     ]
                 ]],
                 200,
@@ -53,6 +56,8 @@ class NBGExchangeRatesServiceTest extends TestCase
      */
     public function test_nbg_exchange_rates_service()
     {
+        $this->setFakeHttpResponse();
+
         $this->currency->code = 'USD';
 
         $rate = $this->service->getExchangeRate($this->currency, $this->date);
@@ -68,6 +73,8 @@ class NBGExchangeRatesServiceTest extends TestCase
      */
     public function test_nbg_exchange_rates_service_uses_cache()
     {
+        $this->setFakeHttpResponse();
+
         $this->currency->code = 'USD';
 
         Cache::shouldReceive('remember')
@@ -84,6 +91,8 @@ class NBGExchangeRatesServiceTest extends TestCase
      */
     public function test_nbg_exchange_rates_service_for_gel()
     {
+        $this->setFakeHttpResponse();
+
         $this->currency->code = 'GEL';
 
         $rate = $this->service->getExchangeRate($this->currency, $this->date);
@@ -98,7 +107,25 @@ class NBGExchangeRatesServiceTest extends TestCase
      */
     public function test_nbg_exchange_rates_service_with_bad_data()
     {
+        $this->setFakeHttpResponse();
+
         $this->currency->code = 'EUR';
+
+        $rate = $this->service->getExchangeRate($this->currency, $this->date);
+
+        $this->assertEquals(null, $rate);
+    }
+
+    /**
+     * Test NBGExchangeRatesService with invalid data
+     *
+     * @return void
+     */
+    public function test_nbg_exchange_rates_service_with_invalid_data()
+    {
+        $this->setFakeHttpResponse(false);
+
+        $this->currency->code = 'USD';
 
         $rate = $this->service->getExchangeRate($this->currency, $this->date);
 

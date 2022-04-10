@@ -10,6 +10,15 @@ class MainPageTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->createOne();
+    }
+
     /**
      * @return void
      */
@@ -25,9 +34,7 @@ class MainPageTest extends TestCase
      */
     public function test_user_with_empty_profile_redirected_to_settings_page()
     {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response = $this->actingAs($this->user)->get(route('dashboard'));
 
         $response->assertRedirect(route('user.settings.edit'));
     }
@@ -37,8 +44,7 @@ class MainPageTest extends TestCase
      */
     public function test_verified_user_with_completed_profile_can_show_dashboard()
     {
-        $user = User::factory()->create();
-        $user->upsertAddress([
+        $this->user->upsertAddress([
             'street1' => 'Test',
             'street2' => 'Test',
             'city' => 'Test',
@@ -47,7 +53,7 @@ class MainPageTest extends TestCase
             'zip' => 'Test',
         ]);
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response = $this->actingAs($this->user)->get(route('dashboard'));
 
         $response->assertStatus(200);
         $response->assertViewIs('dashboard');

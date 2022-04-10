@@ -12,13 +12,13 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $user;
+    private User $user;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->createOne();
     }
 
     /**
