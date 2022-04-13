@@ -14,14 +14,14 @@ class ExchangeRateApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $user;
+    private User $user;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->seed(CurrenciesSeeder::class);
-        $this->user = User::factory()->create();
+        $this->user = User::factory()->createOne();
     }
 
     /**
