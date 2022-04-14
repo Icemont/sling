@@ -29,7 +29,7 @@ class NBGExchangeRatesServiceTest extends TestCase
         $this->date = now();
     }
 
-    protected function setFakeHttpResponse($valid = true): void
+    protected function setFakeHttpResponse(bool $valid = true): void
     {
         Http::fake([
             'nbg.gov.ge/*' => Http::response(
