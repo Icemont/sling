@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Contracts\ExchangeRatesService;
 use App\Models\Currency;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -23,22 +26,21 @@ class NBGExchangeRatesService implements ExchangeRatesService
             return 1.0;
         }
 
-        $rate = $this->getCachedRate($currency, $date);
-
-        return $rate;
+        return $this->getCachedRate($currency, $date);
     }
 
     private function getCachedRate(Currency $currency, Carbon $date): ?float
     {
         $cache_key = $this->cache_prefix . '.' . $currency->code . '.' . $date->format('Ymd');
 
-        $rate = Cache::remember($cache_key, 3600, function () use ($currency, $date) {
+        return (float)Cache::remember($cache_key, 3600, function () use ($currency, $date) {
             return $this->getFromEndpoint($currency, $date);
         });
-
-        return $rate;
     }
 
+    /**
+     * @throws RequestException
+     */
     private function getFromEndpoint(Currency $currency, Carbon $date): ?float
     {
         $data = Http::acceptJson()
