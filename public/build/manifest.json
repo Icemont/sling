@@ -1,0 +1,26 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app.2ca075dd.js",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "__commonjsHelpers.b8add541.js"
+    ]
+  },
+  "resources/js/tabler.js": {
+    "file": "assets/tabler.5cd63ccc.js",
+    "src": "resources/js/tabler.js",
+    "isEntry": true,
+    "imports": [
+      "__commonjsHelpers.b8add541.js"
+    ]
+  },
+  "__commonjsHelpers.b8add541.js": {
+    "file": "assets/_commonjsHelpers.b8add541.js"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app.86d1269c.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  }
+}

@@ -5,25 +5,25 @@
     "keywords": ["sling", "invoices", "invoice", "payments", "business", "php", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.1",
         "ext-json": "*",
-        "barryvdh/laravel-dompdf": "^0.9.0",
-        "fruitcake/laravel-cors": "^2.2",
-        "guzzlehttp/guzzle": "^7.4.5",
-        "laravel/framework": "^8.83.23",
-        "laravel/sanctum": "^2.15.1",
+        "barryvdh/laravel-dompdf": "^2.0",
+        "guzzlehttp/guzzle": "^7.5",
+        "laravel/framework": "^9.32",
+        "laravel/sanctum": "^3.0.1",
         "laravel/tinker": "^2.7.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12.3",
-        "facade/ignition": "^2.17.6",
         "fakerphp/faker": "^1.20",
-        "laravel/breeze": "^1.10",
-        "laravel/sail": "^1.15.4",
-        "mockery/mockery": "^1.5",
-        "nunomaduro/collision": "^5.11",
-        "phpstan/phpstan": "^1.8.2",
-        "phpunit/phpunit": "^9.5.23"
+        "laravel/breeze": "^1.14",
+        "laravel/pint": "^1.2",
+        "laravel/sail": "^1.16.1",
+        "mockery/mockery": "^1.5.1",
+        "nunomaduro/collision": "^6.3",
+        "phpunit/phpunit": "^9.5.25",
+        "spatie/laravel-ignition": "^1.5",
+        "vimeo/psalm": "^4.27"
     },
     "autoload": {
         "psr-4": {
@@ -62,7 +62,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "composer/package-versions-deprecated": true
+            "pestphp/pest-plugin": true
         }
     },
     "minimum-stability": "dev",

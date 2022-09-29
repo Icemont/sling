@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Contracts\HasOwner;
 use App\Scopes\UserScope;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PaymentMethod extends Model implements HasOwner
 {
@@ -32,12 +36,12 @@ class PaymentMethod extends Model implements HasOwner
         return $query->where('is_active', true);
     }
 
-    public function invoices()
+    public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
     }
 
-    public static function getPaginated(int $per_page = 25)
+    public static function getPaginated(int $per_page = 25): LengthAwarePaginator
     {
         return self::orderByDesc('id')->paginate(config('app.per_page.payment_methods', $per_page));
     }
@@ -47,7 +51,7 @@ class PaymentMethod extends Model implements HasOwner
         return $this->user_id;
     }
 
-    public function updatePaymentMethod(array $attributes)
+    public function updatePaymentMethod(array $attributes): bool
     {
         return $this->update([
             'name' => $attributes['name'],

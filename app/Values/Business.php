@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Values;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -16,9 +18,9 @@ class Business implements Arrayable, JsonSerializable
         $this->code = $code;
     }
 
-    public static function fromJson($json): self
+    public static function fromJsonString(?string $json): self
     {
-        $arr = json_decode($json, true) ?: [];
+        $arr = json_decode($json ?? '', true) ?: [];
 
         return new self(
             $arr['name'] ?? '',

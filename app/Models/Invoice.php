@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Contracts\HasOwner;
 use App\Scopes\UserScope;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -17,10 +21,18 @@ class Invoice extends Model implements HasOwner
     use HasFactory;
 
     protected $fillable = [
-        'client_id', 'product_name', 'currency_id',
-        'invoice_number', 'payment_method_id', 'note',
-        'product_price', 'invoice_date', 'is_paid',
-        'payment_date', 'exchange_rate', 'amount',
+        'client_id',
+        'product_name',
+        'currency_id',
+        'invoice_number',
+        'payment_method_id',
+        'note',
+        'product_price',
+        'invoice_date',
+        'is_paid',
+        'payment_date',
+        'exchange_rate',
+        'amount',
     ];
 
     protected $casts = [
@@ -47,27 +59,27 @@ class Invoice extends Model implements HasOwner
         static::updated($forgetter);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function client()
+    public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
     }
 
-    public function currency()
+    public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
     }
 
-    public function paymentMethod()
+    public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public static function getPaginated(int $per_page = 25)
+    public static function getPaginated(int $per_page = 25): LengthAwarePaginator
     {
         return self::with(['client', 'currency'])
             ->orderByDesc('id')
@@ -130,7 +142,7 @@ class Invoice extends Model implements HasOwner
         return $this->user_id;
     }
 
-    public function updateInvoice(array $attributes)
+    public function updateInvoice(array $attributes): bool
     {
         $invoice_data = Arr::only($attributes, [
             'product_name', 'currency_id', 'invoice_number',

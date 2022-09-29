@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -13,7 +15,7 @@ class InvoiceUpdateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -23,7 +25,7 @@ class InvoiceUpdateRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'product_name' => 'required|string|max:150',
@@ -33,18 +35,21 @@ class InvoiceUpdateRequest extends FormRequest
                 'required',
                 'string',
                 'max:25',
-                Rule::unique('invoices')->where(function ($query) {
-                    return $query->where('client_id', $this->invoice->client_id);
-                })->ignore($this->invoice->id),
+                Rule::unique('invoices')
+                    ->where(function ($query) {
+                        return $query->where('client_id', $this->invoice->client_id);
+                    })
+                    ->ignore($this->invoice->id),
             ],
             'invoice_date' => 'required|date_format:"Y-m-d"',
             'payment_method_id' => [
                 'required',
                 'integer',
-                Rule::exists('payment_methods', 'id')->where(function ($query) {
-                    return $query->where('user_id', auth()->id())
-                        ->where('is_active', true);
-                }),
+                Rule::exists('payment_methods', 'id')
+                    ->where(function ($query) {
+                        return $query->where('user_id', auth()->id())
+                            ->where('is_active', true);
+                    }),
             ],
             'is_paid' => 'boolean',
             'payment_date' => 'exclude_unless:is_paid,true|required|date_format:"Y-m-d"',

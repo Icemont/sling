@@ -1,17 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits;
 
 use App\Models\Address;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait HasAddress
 {
     /**
      * Get address.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     * @return MorphOne
      */
-    public function address()
+    public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'addressable');
     }
@@ -19,9 +23,10 @@ trait HasAddress
     /**
      * Update or create address for "addressable".
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param array $attributes
+     * @return Model
      */
-    public function upsertAddress(array $attributes)
+    public function upsertAddress(array $attributes): Model
     {
         return $this->address()->updateOrCreate(
             [],
@@ -35,5 +40,4 @@ trait HasAddress
             ]
         );
     }
-
 }

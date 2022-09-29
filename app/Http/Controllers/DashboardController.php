@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Invoice;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): View
     {
         $statistic = Cache::remember('dashboard.statistic.' . auth()->id(), 300, function () {
             $invoices = Invoice::getCountsGroupedByStatus();

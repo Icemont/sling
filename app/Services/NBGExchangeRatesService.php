@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Http;
 
 class NBGExchangeRatesService implements ExchangeRatesService
 {
-    private string $api_endpoint = 'https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/';
+    public const BASE_CURRENCY = 'GEL';
 
-    private string $base_currency = 'GEL';
+    private const API_ENDPOINT = 'https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/';
 
-    private string $cache_prefix = 'nbg';
+    private const CACHE_PREFIX = 'nbg';
 
     public function getExchangeRate(Currency $currency, Carbon $date): ?float
     {
-        if ($currency->code == $this->base_currency) {
+        if ($currency->code == self::BASE_CURRENCY) {
             return 1.0;
         }
 
@@ -31,7 +31,7 @@ class NBGExchangeRatesService implements ExchangeRatesService
 
     private function getCachedRate(Currency $currency, Carbon $date): ?float
     {
-        $cache_key = $this->cache_prefix . '.' . $currency->code . '.' . $date->format('Ymd');
+        $cache_key = self::CACHE_PREFIX . '.' . $currency->code . '.' . $date->format('Ymd');
 
         return (float)Cache::remember($cache_key, 3600, function () use ($currency, $date) {
             return $this->getFromEndpoint($currency, $date);
@@ -45,7 +45,7 @@ class NBGExchangeRatesService implements ExchangeRatesService
     {
         $data = Http::acceptJson()
             ->timeout(5)
-            ->get($this->api_endpoint, [
+            ->get(self::API_ENDPOINT, [
                 'currencies' => $currency->code,
                 'date' => $date->format('Y-m-d'),
             ])
