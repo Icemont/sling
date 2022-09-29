@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -35,7 +37,7 @@ class SlingInstall extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $this->line('Adding initial data to the database:');
 

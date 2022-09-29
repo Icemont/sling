@@ -1,13 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Alert extends Component
 {
-    public $type;
-    public $message;
+    public string $type;
+    public string $message;
 
     public function __construct($message, $type = 'info')
     {
@@ -15,7 +19,7 @@ class Alert extends Component
         $this->message = $message;
     }
 
-    public function render()
+    public function render(): Factory|View
     {
         return view('components.alert');
     }

@@ -1,22 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserSettingsRequest;
+use App\Models\User;
 use App\Values\Address;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class UserSettingsController extends Controller
 {
-    public function edit()
+    public function edit(): View
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = auth()->user();
+
         $address = new Address($user->address);
 
         return view('user.settings', compact('user', 'address'));
     }
 
-    public function update(UserSettingsRequest $request)
+    public function update(UserSettingsRequest $request): RedirectResponse
     {
         auth()->user()->updateProfileWithAddress($request->validated());
 

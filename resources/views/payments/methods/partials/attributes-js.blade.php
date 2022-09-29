@@ -1,5 +1,5 @@
 <script>
-    $(document).ready(function () {
+    document.addEventListener('DOMContentLoaded', function () {
         $('#attributes').on('click', '.attributes-remove', function () {
             $(this).closest('.row').remove();
         });
@@ -7,5 +7,5 @@
             var tpl = $('template.attributes-tpl').html();
             $('#attributes').append(tpl);
         });
-    });
+    }, false);
 </script>

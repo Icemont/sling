@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InvoiceStoreRequest;
@@ -8,14 +10,18 @@ use App\Models\Client;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\PaymentMethod;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class InvoiceController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $user = auth()->user();
         $invoices = Invoice::getPaginated();
@@ -24,7 +30,7 @@ class InvoiceController extends Controller
         return view('invoices.index', compact('invoices', 'clients', 'user'));
     }
 
-    public function createForm(Request $request)
+    public function createForm(Request $request): RedirectResponse
     {
         $request->validate(['client' => [
             'required',
@@ -37,7 +43,7 @@ class InvoiceController extends Controller
         return redirect(route('invoices.create', ['client' => $request->client]));
     }
 
-    public function create(Client $client)
+    public function create(Client $client): View
     {
         $user = auth()->user();
         $currencies = Currency::all();
@@ -46,7 +52,7 @@ class InvoiceController extends Controller
         return view('invoices.create', compact('client', 'user', 'currencies', 'payment_methods'));
     }
 
-    public function store(InvoiceStoreRequest $request)
+    public function store(InvoiceStoreRequest $request): RedirectResponse
     {
         $invoice = auth()->user()->createInvoice($request->validated());
 
@@ -58,21 +64,21 @@ class InvoiceController extends Controller
             ]);
     }
 
-    public function show(Invoice $invoice)
+    public function show(Invoice $invoice): View
     {
         return view('invoices.show', compact('invoice'));
     }
 
-    public function download(Invoice $invoice)
+    public function download(Invoice $invoice): Response
     {
         $invoice->load(['user', 'user.address', 'currency', 'client', 'paymentMethod']);
 
-        $pdf = PDF::loadView('invoices.templates.invoice1', compact('invoice'));
+        $pdf = Pdf::loadView('invoices.templates.invoice1', compact('invoice'));
 
         return $pdf->download(Str::slug($invoice->invoice_number ?? 'invoice') . '.pdf');
     }
 
-    public function edit(Invoice $invoice)
+    public function edit(Invoice $invoice): View
     {
         $invoice->load('client');
 
@@ -83,7 +89,10 @@ class InvoiceController extends Controller
         return view('invoices.edit', compact('invoice', 'user', 'currencies', 'payment_methods'));
     }
 
-    public function update(InvoiceUpdateRequest $request, Invoice $invoice)
+    /**
+     * @throws AuthorizationException
+     */
+    public function update(InvoiceUpdateRequest $request, Invoice $invoice): RedirectResponse
     {
         $this->authorize('owner', $invoice);
 
@@ -97,7 +106,10 @@ class InvoiceController extends Controller
             ]);
     }
 
-    public function destroy(Invoice $invoice)
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(Invoice $invoice): RedirectResponse
     {
         $this->authorize('owner', $invoice);
 

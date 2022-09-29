@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientStoreRequest;
 use App\Http\Requests\ClientUpdateRequest;
 use App\Models\Client;
 use App\Values\Address;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $clients = Client::getPaginated();
         return view('clients.index', compact('clients'));
     }
 
-    public function store(ClientStoreRequest $request)
+    public function store(ClientStoreRequest $request): RedirectResponse
     {
         $client = Client::createClientWithAddress($request->validated());
 
@@ -27,19 +32,22 @@ class ClientController extends Controller
             ]);
     }
 
-    public function show(Client $client)
+    public function show(Client $client): View
     {
         $address = new Address($client->address);
         return view('clients.show', compact('client', 'address'));
     }
 
-    public function edit(Client $client)
+    public function edit(Client $client): View
     {
         $address = new Address($client->address);
         return view('clients.edit', compact('client', 'address'));
     }
 
-    public function update(ClientUpdateRequest $request, Client $client)
+    /**
+     * @throws AuthorizationException
+     */
+    public function update(ClientUpdateRequest $request, Client $client): RedirectResponse
     {
         $this->authorize('owner', $client);
 
@@ -53,7 +61,10 @@ class ClientController extends Controller
             ]);
     }
 
-    public function destroy(Client $client)
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(Client $client): RedirectResponse
     {
         $this->authorize('owner', $client);
 

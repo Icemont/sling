@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,7 +14,7 @@ class ClientStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,25 +24,27 @@ class ClientStoreRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|string|max:150',
             'email' => [
                 'required',
                 'email',
-                Rule::unique('clients')->where(function ($query) {
-                    return $query->where('user_id', auth()->id());
-                })
+                Rule::unique('clients')
+                    ->where(function ($query) {
+                        return $query->where('user_id', auth()->id());
+                    })
             ],
             'company' => 'nullable|string|max:150',
             'invoice_prefix' => [
                 'required',
                 'alpha_dash',
                 'max:10',
-                Rule::unique('clients')->where(function ($query) {
-                    return $query->where('user_id', auth()->id());
-                })
+                Rule::unique('clients')
+                    ->where(function ($query) {
+                        return $query->where('user_id', auth()->id());
+                    })
             ],
             'invoice_index' => 'required|integer',
             'phone' => 'nullable|digits_between:9,15',
@@ -54,7 +58,7 @@ class ClientStoreRequest extends FormRequest
         ];
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'street1' => 'address line 1',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Casts\BusinessCast;
@@ -7,11 +9,14 @@ use App\Traits\HasAddress;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
+use Throwable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -23,8 +28,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password',
-        'phone', 'business', 'currency_id',
+        'name',
+        'email',
+        'password',
+        'phone',
+        'business',
+        'currency_id',
     ];
 
     /**
@@ -48,32 +57,32 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    public function clients()
+    public function clients(): HasMany
     {
         return $this->hasMany(Client::class);
     }
 
-    public function paymentMethods()
+    public function paymentMethods(): HasMany
     {
         return $this->hasMany(PaymentMethod::class);
     }
 
-    public function currency()
+    public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
     }
 
-    public function invoices()
+    public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class);
     }
 
-    public function getBusinessName()
+    public function getBusinessName(): ?string
     {
         return $this->business->name;
     }
 
-    public function getCurrencyCode()
+    public function getCurrencyCode(): string
     {
         return $this->currency ? $this->currency->code : config('app.default_currency');
     }
@@ -86,7 +95,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this;
     }
 
-    public function updateProfile(array $attributes)
+    public function updateProfile(array $attributes): bool
     {
         return $this->update([
             'name' => $attributes['name'],
@@ -109,6 +118,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $payment_method;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function createInvoice(array $attributes): Invoice
     {
         $invoice_data = Arr::only($attributes, [
@@ -131,14 +143,12 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
 
-        $invoice = DB::transaction(function () use ($invoice_data) {
+        return  DB::transaction(function () use ($invoice_data) {
             $invoice = new Invoice($invoice_data);
             $this->invoices()->save($invoice);
             $invoice->client()->increment('invoice_index');
 
             return $invoice;
         });
-
-        return $invoice;
     }
 }

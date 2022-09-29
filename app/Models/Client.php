@@ -1,21 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Contracts\HasOwner;
 use App\Scopes\UserScope;
 use App\Traits\HasAddress;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class Client extends Model implements HasOwner
 {
     use HasFactory, HasAddress;
 
     protected $fillable = [
-        'user_id', 'name', 'email', 'company',
-        'phone', 'invoice_prefix', 'invoice_index', 'note',
+        'user_id',
+        'name',
+        'email',
+        'company',
+        'phone',
+        'invoice_prefix',
+        'invoice_index',
+        'note',
     ];
 
     protected static function booted()
@@ -23,11 +33,14 @@ class Client extends Model implements HasOwner
         static::addGlobalScope(new UserScope(auth()->id()));
     }
 
-    public static function getPaginated(int $per_page = 25)
+    public static function getPaginated(int $per_page = 25): LengthAwarePaginator
     {
         return self::orderByDesc('id')->paginate(config('app.per_page.clients', $per_page));
     }
 
+    /**
+     * @throws Throwable
+     */
     public static function createClientWithAddress(array $attributes): Client
     {
         return DB::transaction(function () use ($attributes) {
@@ -38,6 +51,9 @@ class Client extends Model implements HasOwner
         });
     }
 
+    /**
+     * @throws Throwable
+     */
     public function updateClientWithAddress(Client $client, array $attributes): Client
     {
         return DB::transaction(function () use ($attributes, $client) {
@@ -48,7 +64,7 @@ class Client extends Model implements HasOwner
         });
     }
 
-    public function deleteWithAddress()
+    public function deleteWithAddress(): ?bool
     {
         $this->address()->delete();
         return $this->delete();
@@ -68,7 +84,7 @@ class Client extends Model implements HasOwner
         ]);
     }
 
-    public function updateClient(array $attributes)
+    public function updateClient(array $attributes): bool
     {
         return $this->update([
             'name' => $attributes['name'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -18,11 +20,11 @@ class UserScope implements Scope
     /**
      * Apply the scope to a given Eloquent query builder.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param Builder $builder
+     * @param Model $model
      * @return void
      */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
         $builder->where($model->getTable() . '.user_id', $this->user_id);
     }

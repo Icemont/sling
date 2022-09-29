@@ -19,7 +19,7 @@
             },
         }));
     });
-    $(document).ready(function () {
+    document.addEventListener('DOMContentLoaded', function () {
         if ($('#is_paid').is(':checked')) {
             $("#paid-form").removeClass('d-none');
         }
@@ -58,5 +58,5 @@
                 btn.removeClass('d-none');
             });
         });
-    });
+    }, false);
 </script>

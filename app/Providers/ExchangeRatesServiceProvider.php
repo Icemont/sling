@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Contracts\ExchangeRatesService;
@@ -15,16 +17,14 @@ class ExchangeRatesServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton(ExchangeRatesService::class, function ($app) {
             $user = auth()->user();
-            switch ($user ? Str::upper($user->getCurrencyCode()) : '') {
-                case 'GEL':
-                    return new NBGExchangeRatesService();
-                default:
-                    return new FakeExchangeRatesService();
-            }
+            return match ($user ? Str::upper($user->getCurrencyCode()) : '') {
+                NBGExchangeRatesService::BASE_CURRENCY => new NBGExchangeRatesService(),
+                default => new FakeExchangeRatesService(),
+            };
         });
     }
 
@@ -33,7 +33,7 @@ class ExchangeRatesServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

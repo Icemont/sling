@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Casts;
 
 use App\Values\Business;
@@ -10,13 +12,13 @@ class BusinessCast implements CastsAttributes
 {
     public function get($model, string $key, $value, array $attributes): Business
     {
-        return Business::fromJson($value);
+        return Business::fromJsonString($value);
     }
 
     public function set($model, string $key, $value, array $attributes): ?string
     {
         $value = Arr::only((array)$value, ['name', 'code']);
-        
+
         return json_encode($value ?: []);
     }
 }
