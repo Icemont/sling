@@ -65,9 +65,9 @@ Complete installation by adding currencies to the database using one of the comm
 Minimized JS and CSS assets are already available in the current repository, but you can install development versions of assets by installing dependencies and executing commands:
 
     $ npm install
-    $ npm run dev
+    $ npm run build
 
-Initial configuration does not differ from the typical Laravel project configuration, so you can refer to the official [Laravel framework documentation](https://laravel.com/docs/8.x/configuration) in case of difficulties.
+Initial configuration does not differ from the typical Laravel project configuration, so you can refer to the official [Laravel framework documentation](https://laravel.com/docs/9.x/configuration) in case of difficulties.
 
 ## Installation with Docker
 Install Docker on your host by using this guide: [https://docs.docker.com/install/](https://docs.docker.com/install/)
