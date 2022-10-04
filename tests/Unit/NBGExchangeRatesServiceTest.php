@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\Models\Currency;
@@ -54,7 +56,7 @@ class NBGExchangeRatesServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_nbg_exchange_rates_service()
+    public function test_nbg_exchange_rates_service(): void
     {
         $this->setFakeHttpResponse();
 
@@ -71,7 +73,7 @@ class NBGExchangeRatesServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_nbg_exchange_rates_service_uses_cache()
+    public function test_nbg_exchange_rates_service_uses_cache(): void
     {
         $this->setFakeHttpResponse();
 
@@ -89,7 +91,7 @@ class NBGExchangeRatesServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_nbg_exchange_rates_service_for_gel()
+    public function test_nbg_exchange_rates_service_for_gel(): void
     {
         $this->setFakeHttpResponse();
 
@@ -105,7 +107,7 @@ class NBGExchangeRatesServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_nbg_exchange_rates_service_with_bad_data()
+    public function test_nbg_exchange_rates_service_with_bad_data(): void
     {
         $this->setFakeHttpResponse();
 
@@ -121,7 +123,7 @@ class NBGExchangeRatesServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_nbg_exchange_rates_service_with_invalid_data()
+    public function test_nbg_exchange_rates_service_with_invalid_data(): void
     {
         $this->setFakeHttpResponse(false);
 

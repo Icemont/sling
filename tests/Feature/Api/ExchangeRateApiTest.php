@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Api;
 
 use App\Contracts\ExchangeRatesService;
@@ -27,7 +29,7 @@ class ExchangeRateApiTest extends TestCase
     /**
      * @return void
      */
-    public function test_exchange_rate_provider_api_endpoint()
+    public function test_exchange_rate_provider_api_endpoint(): void
     {
         $this->instance(ExchangeRatesService::class, new FakeExchangeRatesService());
 

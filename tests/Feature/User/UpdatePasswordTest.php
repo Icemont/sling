@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\User;
 
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -10,9 +13,9 @@ class UpdatePasswordTest extends TestCase
 {
     use RefreshDatabase;
 
-    private User $user;
+    private const NEW_PASSWORD = 'newPass123';
 
-    private string $new_password = 'newPass123';
+    private User $user;
 
     protected function setUp(): void
     {
@@ -24,7 +27,7 @@ class UpdatePasswordTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_can_view_password_update_form()
+    public function test_user_can_view_password_update_form(): void
     {
         $response = $this->actingAs($this->user)->get(route('user.password.edit'));
 
@@ -35,19 +38,19 @@ class UpdatePasswordTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_can_update_password()
+    public function test_user_can_update_password(): void
     {
         $response = $this->actingAs($this->user)->put(
             route('user.password.update'),
             [
-                'current_password' => 'password',
-                'new_password' => $this->new_password,
-                'new_password_confirmation' => $this->new_password,
+                'current_password' => UserFactory::DEFAULT_PASSWORD,
+                'new_password' => self::NEW_PASSWORD,
+                'new_password_confirmation' => self::NEW_PASSWORD,
             ]
         );
 
         $this->user->refresh();
-        $this->assertTrue(\Hash::check($this->new_password, $this->user->password));
+        $this->assertTrue(\Hash::check(self::NEW_PASSWORD, $this->user->password));
 
         $response->assertSessionHasNoErrors();
         $response->assertSessionHasAll([
@@ -62,13 +65,13 @@ class UpdatePasswordTest extends TestCase
     /**
      * @return void
      */
-    public function test_new_password_must_be_confirmed()
+    public function test_new_password_must_be_confirmed(): void
     {
         $response = $this->actingAs($this->user)->put(
             route('user.password.update'),
             [
-                'current_password' => 'password',
-                'new_password' => $this->new_password,
+                'current_password' => UserFactory::DEFAULT_PASSWORD,
+                'new_password' => self::NEW_PASSWORD,
                 'new_password_confirmation' => '',
             ]
         );
@@ -79,14 +82,14 @@ class UpdatePasswordTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_must_enter_current_password()
+    public function test_user_must_enter_current_password(): void
     {
         $response = $this->actingAs($this->user)->put(
             route('user.password.update'),
             [
                 'current_password' => '',
-                'new_password' => $this->new_password,
-                'new_password_confirmation' => $this->new_password,
+                'new_password' => self::NEW_PASSWORD,
+                'new_password_confirmation' => self::NEW_PASSWORD,
             ]
         );
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\User;
 
 use App\Models\User;
@@ -25,7 +27,7 @@ class UpdateSettingsTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_can_view_settings_update_form()
+    public function test_user_can_view_settings_update_form(): void
     {
         $response = $this->actingAs($this->user)->get(route('user.settings.edit'));
 
@@ -43,7 +45,7 @@ class UpdateSettingsTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_can_update_settings()
+    public function test_user_can_update_settings(): void
     {
         $response = $this->actingAs($this->user)->put(
             route('user.settings.update'),
@@ -63,7 +65,7 @@ class UpdateSettingsTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_must_provide_required_data()
+    public function test_user_must_provide_required_data(): void
     {
         $response = $this->actingAs($this->user)->put(
             route('user.settings.update'),
@@ -79,6 +81,7 @@ class UpdateSettingsTest extends TestCase
     /**
      * Get data for the test
      *
+     * @param bool $valid
      * @return array
      */
     private function getTestData(bool $valid = true): array

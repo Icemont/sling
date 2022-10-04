@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\User;
@@ -22,7 +24,7 @@ class MainPageTest extends TestCase
     /**
      * @return void
      */
-    public function test_guest_redirected_to_login_page()
+    public function test_guest_redirected_to_login_page(): void
     {
         $response = $this->get(route('dashboard'));
 
@@ -32,7 +34,7 @@ class MainPageTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_with_empty_profile_redirected_to_settings_page()
+    public function test_user_with_empty_profile_redirected_to_settings_page(): void
     {
         $response = $this->actingAs($this->user)->get(route('dashboard'));
 
@@ -42,7 +44,7 @@ class MainPageTest extends TestCase
     /**
      * @return void
      */
-    public function test_verified_user_with_completed_profile_can_show_dashboard()
+    public function test_verified_user_with_completed_profile_can_show_dashboard(): void
     {
         $this->user->upsertAddress([
             'street1' => 'Test',

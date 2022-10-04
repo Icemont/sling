@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\Http\Middleware\EnsureProfileIsFilled;
@@ -24,7 +26,7 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
     /**
      * @return void
      */
-    public function test_users_without_address_are_redirected()
+    public function test_users_without_address_are_redirected(): void
     {
         $request = Request::create('/');
 
@@ -43,7 +45,7 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
     /**
      * @return void
      */
-    public function test_users_with_address_are_not_redirected()
+    public function test_users_with_address_are_not_redirected(): void
     {
         $request = Request::create('/');
 
