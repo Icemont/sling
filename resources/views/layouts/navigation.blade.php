@@ -29,10 +29,9 @@
                     <div class="dropdown-divider"></div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <a href="route('logout')"
-                           onclick="event.preventDefault();
-                                                this.closest('form').submit();"
-                           class="dropdown-item">{{ __('Log Out') }}</a>
+                        <a href="#" onclick="event.preventDefault();this.closest('form').submit();" class="dropdown-item">
+                            {{ __('Log Out') }}
+                        </a>
                     </form>
                 </div>
             </div>
