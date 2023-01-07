@@ -34,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'business',
         'currency_id',
+        'dark_theme',
     ];
 
     /**
@@ -54,6 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'business' => BusinessCast::class,
+        'dark_theme' => 'boolean',
     ];
 
 

@@ -16,7 +16,7 @@
         }
     </style>
 </head>
-<body>
+<body class="theme-{{ Auth::user()?->dark_theme ? 'dark' : 'light' }}">
 <div class="font-sans text-gray-900 antialiased">
     {{ $slot }}
 </div>

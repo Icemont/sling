@@ -8,8 +8,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserSettingsController;
 use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth'])->group(static function () {
+    Route::get('/theme', ThemeController::class)->name('theme');
+});
 
 Route::middleware(['auth', 'verified', 'filled'])->group(static function () {
     Route::get('/', DashboardController::class)->name('dashboard');

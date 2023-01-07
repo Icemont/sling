@@ -19,7 +19,7 @@
         }
     </style>
 </head>
-<body class="theme-light">
+<body class="theme-{{ Auth::user()->dark_theme ? 'dark' : 'light' }}">
 @include('layouts.navigation')
 <div class="page">
     <div class="page-wrapper">
