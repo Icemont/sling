@@ -5,24 +5,32 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientStoreRequest;
-use App\Http\Requests\ClientUpdateRequest;
 use App\Models\Client;
-use App\Values\Address;
+use App\Repositories\ClientRepository;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Throwable;
 
 class ClientController extends Controller
 {
-    public function index(): View
+    public function __construct(private readonly ClientRepository $clientRepository)
     {
-        $clients = Client::getPaginated();
-        return view('clients.index', compact('clients'));
     }
 
+    public function index(): View
+    {
+        return view('clients.index', [
+            'clients' => $this->clientRepository->getPaginated(),
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function store(ClientStoreRequest $request): RedirectResponse
     {
-        $client = Client::createClientWithAddress($request->validated());
+        $client = $this->clientRepository->createWithAddress($request);
 
         return redirect()
             ->route('clients.index')
@@ -34,24 +42,23 @@ class ClientController extends Controller
 
     public function show(Client $client): View
     {
-        $address = new Address($client->address);
-        return view('clients.show', compact('client', 'address'));
+        return view('clients.show', compact('client'));
     }
 
     public function edit(Client $client): View
     {
-        $address = new Address($client->address);
-        return view('clients.edit', compact('client', 'address'));
+        return view('clients.edit', compact('client'));
     }
 
     /**
+     * @throws Throwable
      * @throws AuthorizationException
      */
-    public function update(ClientUpdateRequest $request, Client $client): RedirectResponse
+    public function update(ClientStoreRequest $request, Client $client): RedirectResponse
     {
         $this->authorize('owner', $client);
 
-        $client->updateClientWithAddress($client, $request->validated());
+        $this->clientRepository->updateWithAddress($client, $request);
 
         return redirect()
             ->route('clients.index')
@@ -68,7 +75,7 @@ class ClientController extends Controller
     {
         $this->authorize('owner', $client);
 
-        $client->deleteWithAddress();
+        $this->clientRepository->deleteWithAddress($client);
 
         return redirect()->route('clients.index')->with([
             'status' => __('Client ":client" deleted!', ['client' => $client->name]),

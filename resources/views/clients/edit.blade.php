@@ -77,7 +77,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Country') }}</label>
-                                    <input type="text" name="country" value="{{ $address->country }}"
+                                    <input type="text" name="country" value="{{ $client->address?->country }}"
                                            class="form-control" required>
                                 </div>
                             </div>
@@ -85,33 +85,33 @@
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('State') }} / {{ __('Region') }}
                                         / {{ __('Province') }}</label>
-                                    <input type="text" name="state" value="{{ $address->state }}" class="form-control">
+                                    <input type="text" name="state" value="{{ $client->address?->state }}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('City') }}</label>
-                                    <input type="text" name="city" value="{{ $address->city }}" class="form-control"
+                                    <input type="text" name="city" value="{{ $client->address?->city }}" class="form-control"
                                            required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('ZIP') }} / {{ __('Postal Code') }}</label>
-                                    <input type="text" name="zip" value="{{ $address->zip }}" class="form-control">
+                                    <input type="text" name="zip" value="{{ $client->address?->zip }}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Address Line 1') }}</label>
-                                    <input type="text" name="street1" value="{{ $address->street1 }}"
+                                    <input type="text" name="street1" value="{{ $client->address?->street1 }}"
                                            class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('Address Line 2') }}</label>
-                                    <input type="text" name="street2" value="{{ $address->street2 }}"
+                                    <input type="text" name="street2" value="{{ $client->address?->street2 }}"
                                            class="form-control">
                                 </div>
                             </div>
