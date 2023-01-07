@@ -13,8 +13,8 @@
         "vite": "^3.0.0"
     },
     "dependencies": {
-        "@tabler/core": "^v1.0.0-beta11",
-        "jquery": "^3.6.0",
+        "@tabler/core": "^v1.0.0-beta16",
+        "jquery": "^3.6.3",
         "litepicker": "^2.0.12"
     }
 }
