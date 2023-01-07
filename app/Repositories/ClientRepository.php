@@ -12,10 +12,10 @@ use Throwable;
 
 class ClientRepository
 {
-    public function getPaginated(int $per_page = 25): LengthAwarePaginator
+    public function getPaginated(int $perPage = 25): LengthAwarePaginator
     {
         return Client::orderByDesc('id')
-            ->paginate(config('app.per_page.clients', $per_page));
+            ->paginate(config('app.per_page.clients', $perPage));
     }
 
     public function create(ClientStoreRequest $request): Client
