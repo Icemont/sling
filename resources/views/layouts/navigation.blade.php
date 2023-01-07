@@ -3,7 +3,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <x-application-logo class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3"/>
+        <x-application-logo class="navbar-brand navbar-brand-autodark h1 text-primary d-none-navbar-horizontal pe-0 pe-md-3"/>
         <div class="navbar-nav flex-row order-md-last">
             <div class="d-none d-md-flex">
                 <a href="{{ route('theme', ['theme' => 'dark']) }}" class="nav-link px-0 hide-theme-dark" title="{{ __('Enable dark mode') }}" data-bs-toggle="tooltip" data-bs-placement="bottom">
