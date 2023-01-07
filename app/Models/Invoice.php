@@ -94,11 +94,18 @@ class Invoice extends Model implements HasOwner
     public static function getForReport(Carbon $from_date, Carbon $to_date): Collection
     {
         return self::select([
-            'invoices.payment_date', 'invoices.invoice_number',
-            'invoices.amount', 'invoices.client_id',
+            'invoices.payment_date',
+            'invoices.invoice_number',
+            'invoices.amount',
+            'invoices.product_price',
+            'invoices.client_id',
+            'invoices.exchange_rate',
+            'invoices.currency_id',
+            'currencies.code as currency',
             'clients.name as client_name',
         ])
             ->leftJoin('clients', 'invoices.client_id', '=', 'clients.id')
+            ->leftJoin('currencies', 'invoices.currency_id', '=', 'currencies.id')
             ->where('invoices.is_paid', true)
             ->whereDate('invoices.payment_date', '>=', $from_date)
             ->whereDate('invoices.payment_date', '<=', $to_date)
@@ -145,8 +152,11 @@ class Invoice extends Model implements HasOwner
     public function updateInvoice(array $attributes): bool
     {
         $invoice_data = Arr::only($attributes, [
-            'product_name', 'currency_id', 'invoice_number',
-            'payment_method_id', 'note',
+            'product_name',
+            'currency_id',
+            'invoice_number',
+            'payment_method_id',
+            'note',
         ]);
 
         $invoice_data['product_price'] = round(floatval($attributes['product_price']), 2);

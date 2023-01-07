@@ -90,7 +90,11 @@
                     @endif
                     <tr>
                         <td>{{ $invoice->payment_date->format('d.m.Y') }}
-                            ({{ $invoice->invoice_number }})
+                            @if($user->currency->id == $invoice->currency_id)
+                                ({{ $invoice->invoice_number }})
+                            @else
+                                ({{ $invoice->invoice_number }}, {{ $invoice->product_price }} {{ $invoice->currency }} x {{ $invoice->exchange_rate }})
+                            @endif
                         </td>
                         <td>
                             {{ $invoice->amount }} {{ $user->currency->code }}
