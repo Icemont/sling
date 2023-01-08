@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Http\Requests\ClientStoreRequest;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -16,6 +17,11 @@ class ClientRepository
     {
         return Client::orderByDesc('id')
             ->paginate(config('app.per_page.clients', $perPage));
+    }
+
+    public function getAllForSelector(): Collection
+    {
+        return Client::all(['id', 'name']);
     }
 
     public function create(ClientStoreRequest $request): Client

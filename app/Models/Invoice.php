@@ -6,11 +6,9 @@ namespace App\Models;
 
 use App\Contracts\HasOwner;
 use App\Scopes\UserScope;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -79,13 +77,6 @@ class Invoice extends Model implements HasOwner
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public static function getPaginated(int $per_page = 25): LengthAwarePaginator
-    {
-        return self::with(['client', 'currency'])
-            ->orderByDesc('id')
-            ->paginate(config('app.per_page.invoices', $per_page));
-    }
-
     /**
      * @param Carbon $from_date
      * @param Carbon $to_date
@@ -147,33 +138,5 @@ class Invoice extends Model implements HasOwner
     public function getOwnerId(): ?int
     {
         return $this->user_id;
-    }
-
-    public function updateInvoice(array $attributes): bool
-    {
-        $invoice_data = Arr::only($attributes, [
-            'product_name',
-            'currency_id',
-            'invoice_number',
-            'payment_method_id',
-            'note',
-        ]);
-
-        $invoice_data['product_price'] = round(floatval($attributes['product_price']), 2);
-        $invoice_data['invoice_date'] = Carbon::createFromFormat('Y-m-d', $attributes['invoice_date']);
-        $invoice_data['is_paid'] = $attributes['is_paid'] ?? false;
-
-        if ($invoice_data['is_paid']) {
-            $invoice_data['payment_date'] = Carbon::createFromFormat('Y-m-d', $attributes['payment_date']);
-
-            if ($this->user->currency_id == $attributes['currency_id']) {
-                $invoice_data['amount'] = $invoice_data['product_price'];
-            } else {
-                $invoice_data['exchange_rate'] = floatval($attributes['exchange_rate']);
-                $invoice_data['amount'] = $invoice_data['product_price'] * $invoice_data['exchange_rate'];
-            }
-        }
-
-        return $this->update($invoice_data);
     }
 }

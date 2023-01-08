@@ -4,57 +4,58 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceCreateFormRequest;
 use App\Http\Requests\InvoiceStoreRequest;
-use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Client;
 use App\Models\Currency;
 use App\Models\Invoice;
-use App\Models\PaymentMethod;
+use App\Repositories\ClientRepository;
+use App\Repositories\InvoiceRepository;
+use App\Repositories\PaymentMethodRepository;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
+use Throwable;
 
 class InvoiceController extends Controller
 {
-    public function index(): View
+    public function __construct(private readonly InvoiceRepository $invoiceRepository)
     {
-        $user = auth()->user();
-        $invoices = Invoice::getPaginated();
-        $clients = Client::all(['id', 'name']);
-
-        return view('invoices.index', compact('invoices', 'clients', 'user'));
     }
 
-    public function createForm(Request $request): RedirectResponse
+    public function index(ClientRepository $clientRepository): View
     {
-        $request->validate(['client' => [
-            'required',
-            'integer',
-            Rule::exists('clients', 'id')->where(function ($query) {
-                return $query->where('user_id', auth()->id());
-            }),
-        ]]);
-
-        return redirect(route('invoices.create', ['client' => $request->client]));
+        return view('invoices.index', [
+            'invoices' => $this->invoiceRepository->getPaginatedWithRelations(),
+            'clients' => $clientRepository->getAllForSelector(),
+            'user' => auth()->user(),
+        ]);
     }
 
-    public function create(Client $client): View
+    public function createForm(InvoiceCreateFormRequest $request): RedirectResponse
     {
-        $user = auth()->user();
-        $currencies = Currency::all();
-        $payment_methods = PaymentMethod::active()->get(['id', 'name']);
-
-        return view('invoices.create', compact('client', 'user', 'currencies', 'payment_methods'));
+        return redirect(route('invoices.create', ['client' => $request->getClientId()]));
     }
 
+    public function create(PaymentMethodRepository $paymentMethodRepository, Client $client): View
+    {
+        return view('invoices.create', [
+            'client' => $client,
+            'user' => auth()->user(),
+            'currencies' => Currency::all(),
+            'payment_methods' => $paymentMethodRepository->getActiveForSelector(),
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function store(InvoiceStoreRequest $request): RedirectResponse
     {
-        $invoice = auth()->user()->createInvoice($request->validated());
+        $invoice = $this->invoiceRepository->create($request);
 
         return redirect()
             ->route('invoices.index')
@@ -78,25 +79,26 @@ class InvoiceController extends Controller
         return $pdf->download(Str::slug($invoice->invoice_number ?? 'invoice') . '.pdf');
     }
 
-    public function edit(Invoice $invoice): View
+    public function edit(PaymentMethodRepository $paymentMethodRepository, Invoice $invoice): View
     {
         $invoice->load('client');
 
-        $user = auth()->user();
-        $currencies = Currency::all();
-        $payment_methods = PaymentMethod::active()->get(['id', 'name']);
-
-        return view('invoices.edit', compact('invoice', 'user', 'currencies', 'payment_methods'));
+        return view('invoices.edit', [
+            'invoice' => $invoice,
+            'user' => auth()->user(),
+            'currencies' => Currency::all(),
+            'payment_methods' => $paymentMethodRepository->getActiveForSelector(),
+        ]);
     }
 
     /**
      * @throws AuthorizationException
      */
-    public function update(InvoiceUpdateRequest $request, Invoice $invoice): RedirectResponse
+    public function update(InvoiceStoreRequest $request, Invoice $invoice): RedirectResponse
     {
         $this->authorize('owner', $invoice);
 
-        $invoice->updateInvoice($request->validated());
+        $this->invoiceRepository->update($invoice, $request);
 
         return redirect()
             ->route('invoices.index')
