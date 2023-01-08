@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Models\Invoice;
 use App\Models\PaymentMethod;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class PaymentMethodRepository
@@ -16,6 +14,4 @@ class PaymentMethodRepository
     {
         return PaymentMethod::active()->get(['id', 'name']);
     }
-
-
 }
