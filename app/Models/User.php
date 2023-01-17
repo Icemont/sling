@@ -85,23 +85,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->currency ? $this->currency->code : config('app.default_currency');
     }
 
-    public function updateProfileWithAddress(array $attributes): self
-    {
-        $this->updateProfile($attributes);
-        $this->upsertAddress($attributes);
-
-        return $this;
-    }
-
-    public function updateProfile(array $attributes): bool
-    {
-        return $this->update([
-            'name' => $attributes['name'],
-            'business' => $attributes['business'],
-            'phone' => $attributes['phone'],
-        ]);
-    }
-
     public function createPaymentMethod(array $attributes): PaymentMethod
     {
         $payment_method = new PaymentMethod([

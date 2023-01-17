@@ -8,21 +8,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UserSettingsRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
@@ -38,5 +28,30 @@ class UserSettingsRequest extends FormRequest
             'street1' => 'required|string|max:150',
             'street2' => 'nullable|string|max:150',
         ];
+    }
+
+    public function getUserProfilePayload(): array
+    {
+        return collect($this->validated())
+            ->only([
+                'name',
+                'business',
+                'phone',
+            ])
+            ->toArray();
+    }
+
+    public function getUserAddressPayload(): array
+    {
+        return collect($this->validated())
+            ->only([
+                'street1',
+                'street2',
+                'city',
+                'state',
+                'country',
+                'zip',
+            ])
+            ->toArray();
     }
 }

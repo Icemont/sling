@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserSettingsRequest;
-use App\Models\User;
+use App\Services\AuthenticatedUserService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -18,9 +18,12 @@ class UserSettingsController extends Controller
         ]);
     }
 
-    public function update(UserSettingsRequest $request): RedirectResponse
+    public function update(
+        AuthenticatedUserService $authenticatedUserService,
+        UserSettingsRequest      $request
+    ): RedirectResponse
     {
-        auth()->user()->updateProfileWithAddress($request->validated());
+        $authenticatedUserService->updateProfileWithAddress($request);
 
         return redirect()
             ->route('user.settings.edit')
