@@ -15,18 +15,14 @@ class AuthenticatedUserService
 
     public function updateProfileWithAddress(UserSettingsRequest $request): User
     {
-        $this->updateProfile($request->getUserProfilePayload());
+        $this->updateProfile($request);
         $this->user->upsertAddress($request->getUserAddressPayload());
 
         return $this->user;
     }
 
-    public function updateProfile(array $attributes): bool
+    public function updateProfile(UserSettingsRequest $request): bool
     {
-        return $this->user->update([
-            'name' => $attributes['name'],
-            'business' => $attributes['business'],
-            'phone' => $attributes['phone'],
-        ]);
+        return $this->user->update($request->getUserProfilePayload());
     }
 }
