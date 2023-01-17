@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Feature\User;
 
 use App\Models\User;
-use App\Values\Address;
 use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use JsonException;
 use Tests\TestCase;
 
 class UpdateSettingsTest extends TestCase
@@ -24,18 +24,12 @@ class UpdateSettingsTest extends TestCase
         $this->user = User::factory()->createOne();
     }
 
-    /**
-     * @return void
-     */
     public function test_user_can_view_settings_update_form(): void
     {
         $response = $this->actingAs($this->user)->get(route('user.settings.edit'));
 
-        $address = new Address($this->user->address);
-
         $response->assertViewHasAll([
             'user' => $this->user,
-            'address' => $address,
         ]);
 
         $response->assertStatus(200);
@@ -43,7 +37,7 @@ class UpdateSettingsTest extends TestCase
     }
 
     /**
-     * @return void
+     * @throws JsonException
      */
     public function test_user_can_update_settings(): void
     {
@@ -62,9 +56,6 @@ class UpdateSettingsTest extends TestCase
         $response->assertStatus(302);
     }
 
-    /**
-     * @return void
-     */
     public function test_user_must_provide_required_data(): void
     {
         $response = $this->actingAs($this->user)->put(

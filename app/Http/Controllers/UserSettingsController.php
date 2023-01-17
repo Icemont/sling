@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserSettingsRequest;
 use App\Models\User;
-use App\Values\Address;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -14,12 +13,9 @@ class UserSettingsController extends Controller
 {
     public function edit(): View
     {
-        /** @var User $user */
-        $user = auth()->user();
-
-        $address = new Address($user->address);
-
-        return view('user.settings', compact('user', 'address'));
+        return view('user.settings', [
+            'user' => auth()->user(),
+        ]);
     }
 
     public function update(UserSettingsRequest $request): RedirectResponse
