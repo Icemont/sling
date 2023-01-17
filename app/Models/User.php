@@ -84,18 +84,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->currency ? $this->currency->code : config('app.default_currency');
     }
-
-    public function createPaymentMethod(array $attributes): PaymentMethod
-    {
-        $payment_method = new PaymentMethod([
-            'name' => $attributes['name'],
-            'attributes' => isset($attributes['method_attributes']) ?
-                array_combine($attributes['method_attributes']['keys'], $attributes['method_attributes']['values']) : [],
-            'is_active' => $attributes['is_active'] ?? false,
-        ]);
-
-        $this->paymentMethods()->save($payment_method);
-
-        return $payment_method;
-    }
 }
