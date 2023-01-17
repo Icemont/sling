@@ -19,8 +19,8 @@ class UserSettingsController extends Controller
     }
 
     public function update(
-        AuthenticatedUserService $authenticatedUserService,
-        UserSettingsRequest      $request
+        UserSettingsRequest      $request,
+        AuthenticatedUserService $authenticatedUserService
     ): RedirectResponse
     {
         $authenticatedUserService->updateProfileWithAddress($request);
