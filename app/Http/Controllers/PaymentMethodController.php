@@ -6,16 +6,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentMethodRequest;
 use App\Models\PaymentMethod;
+use App\Repositories\PaymentMethodRepository;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class PaymentMethodController extends Controller
 {
+    public function __construct(private readonly PaymentMethodRepository $paymentMethodRepository)
+    {
+    }
+
     public function index(): View
     {
-        $payment_methods = PaymentMethod::getPaginated();
-        return view('payments.methods.index', compact('payment_methods'));
+        return view('payments.methods.index', [
+            'payment_methods' => $this->paymentMethodRepository->getPaginated(),
+        ]);
     }
 
     public function create(): View
@@ -25,39 +31,43 @@ class PaymentMethodController extends Controller
 
     public function store(PaymentMethodRequest $request): RedirectResponse
     {
-        $payment_method = auth()->user()->createPaymentMethod($request->validated());
+        $paymentMethod = $this->paymentMethodRepository->create($request);
 
         return redirect()
             ->route('payment-methods.index')
             ->with([
-                'status' => __('New payment method ":method" successfully added!', ['method' => $payment_method->name]),
+                'status' => __('New payment method ":method" successfully added!', [
+                    'method' => $paymentMethod->name,
+                ]),
                 'type' => 'success'
             ]);
     }
 
-    public function show(PaymentMethod $payment_method): View
+    public function show(PaymentMethod $paymentMethod): View
     {
-        return view('payments.methods.show', compact('payment_method'));
+        return view('payments.methods.show', compact('paymentMethod'));
     }
 
-    public function edit(PaymentMethod $payment_method): View
+    public function edit(PaymentMethod $paymentMethod): View
     {
-        return view('payments.methods.edit', compact('payment_method'));
+        return view('payments.methods.edit', compact('paymentMethod'));
     }
 
     /**
      * @throws AuthorizationException
      */
-    public function update(PaymentMethodRequest $request, PaymentMethod $payment_method): RedirectResponse
+    public function update(PaymentMethodRequest $request, PaymentMethod $paymentMethod): RedirectResponse
     {
-        $this->authorize('owner', $payment_method);
+        $this->authorize('owner', $paymentMethod);
 
-        $payment_method->updatePaymentMethod($request->validated());
+        $this->paymentMethodRepository->updatePaymentMethod($paymentMethod, $request);
 
         return redirect()
             ->route('payment-methods.index')
             ->with([
-                'status' => __('Payment method ":method" successfully updated!', ['method' => $payment_method->name]),
+                'status' => __('Payment method ":method" successfully updated!', [
+                    'method' => $paymentMethod->name,
+                ]),
                 'type' => 'success'
             ]);
     }
@@ -65,21 +75,23 @@ class PaymentMethodController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function destroy(PaymentMethod $payment_method): RedirectResponse
+    public function destroy(PaymentMethod $paymentMethod): RedirectResponse
     {
-        $this->authorize('owner', $payment_method);
+        $this->authorize('owner', $paymentMethod);
 
-        if ($payment_method->invoices()->count() > 0) {
+        if ($paymentMethod->invoices()->count() > 0) {
             return redirect()->back()->with([
-                'status' => __('Payment method ":method" is used by invoices and cannot be deleted!', ['method' => $payment_method->name]),
+                'status' => __('Payment method ":method" is used by invoices and cannot be deleted!', [
+                    'method' => $paymentMethod->name,
+                ]),
                 'type' => 'danger'
             ]);
         }
 
-        $payment_method->delete();
+        $paymentMethod->delete();
 
         return redirect()->route('payment-methods.index')->with([
-            'status' => __('Payment method ":method" deleted!', ['method' => $payment_method->name]),
+            'status' => __('Payment method ":method" deleted!', ['method' => $paymentMethod->name]),
             'type' => 'info'
         ]);
     }

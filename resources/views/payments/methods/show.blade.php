@@ -10,14 +10,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">{{ __('Payment method #:id information', ['id' => $payment_method->id]) }}</h4>
+                    <h4 class="card-title">{{ __('Payment method #:id information', ['id' => $paymentMethod->id]) }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row mb-2">
                         <div class="col-lg-8">
                             <div class="mb-3">
                                 <label class="form-label required">{{ __('Payment Method Name') }}</label>
-                                <input type="text" name="name" value="{{  $payment_method->name }}"
+                                <input type="text" name="name" value="{{ $paymentMethod->name }}"
                                        class="form-control"
                                        required>
                             </div>
@@ -26,8 +26,8 @@
                     <div class="border rounded mb-3 p-4">
                         <label class="form-label required">{{ __('Attributes') }}</label>
                         <div id="attributes">
-                            @if($payment_method->attributes && is_array($payment_method->attributes))
-                                @foreach($payment_method->attributes as $k => $v)
+                            @if($paymentMethod->attributes && is_array($paymentMethod->attributes))
+                                @foreach($paymentMethod->attributes as $k => $v)
                                     <x-payment-method-attribute :key="$k" :value="$v" :removable="false"
                                                                 :readonly="true"/>
                                 @endforeach
@@ -39,7 +39,7 @@
                             <div class="mb-3">
                                 <label class="form-check form-switch">
                                     <input name="is_active" value="1" class="form-check-input"
-                                           type="checkbox" {{$payment_method->is_active ? ' checked' : '' }} disabled>
+                                           type="checkbox" {{ $paymentMethod->is_active ? ' checked' : '' }} disabled>
                                     <span class="form-check-label">{{ __('Active') }}</span>
                                 </label>
                             </div>

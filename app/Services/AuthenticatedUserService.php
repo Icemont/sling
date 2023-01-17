@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Http\Requests\PaymentMethodRequest;
 use App\Http\Requests\UserSettingsRequest;
+use App\Models\PaymentMethod;
 use App\Models\User;
 
 class AuthenticatedUserService

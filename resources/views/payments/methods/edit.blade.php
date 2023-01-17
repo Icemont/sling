@@ -21,10 +21,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">{{ __('Edit payment method #:id', ['id' => $payment_method->id]) }}</h4>
+                    <h4 class="card-title">{{ __('Edit payment method #:id', ['id' => $paymentMethod->id]) }}</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('payment-methods.update', ['payment_method' => $payment_method->id]) }}"
+                    <form action="{{ route('payment-methods.update', ['payment_method' => $paymentMethod->id]) }}"
                           method="post">
                         @csrf
                         @method('PUT')
@@ -32,7 +32,7 @@
                             <div class="col-lg-8">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Payment Method Name') }}</label>
-                                    <input type="text" name="name" value="{{  $payment_method->name }}"
+                                    <input type="text" name="name" value="{{ $paymentMethod->name }}"
                                            class="form-control"
                                            required>
                                 </div>
@@ -41,8 +41,8 @@
                         <div class="border rounded mb-3 p-4">
                             <label class="form-label required">{{ __('Attributes') }}</label>
                             <div id="attributes">
-                                @if($payment_method->attributes && is_array($payment_method->attributes))
-                                    @foreach($payment_method->attributes as $k => $v)
+                                @if($paymentMethod->attributes && is_array($paymentMethod->attributes))
+                                    @foreach($paymentMethod->attributes as $k => $v)
                                         <x-payment-method-attribute :key="$k" :value="$v" :removable="!$loop->first"/>
                                     @endforeach
                                 @else
@@ -61,7 +61,7 @@
                                 <div class="mb-3">
                                     <label class="form-check form-switch">
                                         <input name="is_active" value="1" class="form-check-input"
-                                               type="checkbox"{{$payment_method->is_active ? ' checked' : '' }}>
+                                               type="checkbox"{{ $paymentMethod->is_active ? ' checked' : '' }}>
                                         <span class="form-check-label">{{ __('Active') }}</span>
                                     </label>
                                 </div>
