@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Models\Invoice;
 use App\Models\User;
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -80,7 +81,7 @@ class InvoiceRepository
         return Invoice::where('is_paid', true)->sum('amount');
     }
 
-    public function getPaidAmountByDates(CarbonImmutable $dateFrom, CarbonImmutable $dateTo)
+    public function getPaidAmountByDates(Carbon $dateFrom, Carbon $dateTo)
     {
         return Invoice::where('is_paid', true)
             ->whereDate('payment_date', '>=', $dateFrom)
@@ -90,7 +91,7 @@ class InvoiceRepository
 
     public function getPaidAmountCurrentMonth()
     {
-        return Invoice::getPaidAmountByDates(
+        return $this->getPaidAmountByDates(
             now()->startOfMonth(),
             now()->endOfMonth()
         );

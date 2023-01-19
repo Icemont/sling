@@ -9,10 +9,7 @@ use App\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model implements HasOwner
 {
@@ -75,37 +72,6 @@ class Invoice extends Model implements HasOwner
     public function paymentMethod(): BelongsTo
     {
         return $this->belongsTo(PaymentMethod::class);
-    }
-
-    public static function getCountsGroupedByStatus(): Collection
-    {
-        return self::select([
-            DB::raw('count(*) as invoices_count'),
-            'is_paid'
-        ])
-            ->groupBy('is_paid')
-            ->get();
-    }
-
-    public static function getPaidTotalAmount()
-    {
-        return self::where('is_paid', true)->sum('amount');
-    }
-
-    public static function getPaidAmountByDates(Carbon $from_date, Carbon $to_date)
-    {
-        return self::where('is_paid', true)
-            ->whereDate('payment_date', '>=', $from_date)
-            ->whereDate('payment_date', '<=', $to_date)
-            ->sum('amount');
-    }
-
-    public static function getPaidAmountCurrentMonth()
-    {
-        return self::getPaidAmountByDates(
-            now()->startOfMonth(),
-            now()->endOfMonth()
-        );
     }
 
     public function getOwnerId(): ?int
