@@ -8,6 +8,7 @@ use App\Http\Requests\PaymentMethodRequest;
 use App\Models\PaymentMethod;
 use App\Repositories\PaymentMethodRepository;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -17,14 +18,14 @@ class PaymentMethodController extends Controller
     {
     }
 
-    public function index(): View
+    public function index(): View|Factory
     {
         return view('payments.methods.index', [
             'payment_methods' => $this->paymentMethodRepository->getPaginated(),
         ]);
     }
 
-    public function create(): View
+    public function create(): View|Factory
     {
         return view('payments.methods.create');
     }
@@ -43,12 +44,12 @@ class PaymentMethodController extends Controller
             ]);
     }
 
-    public function show(PaymentMethod $paymentMethod): View
+    public function show(PaymentMethod $paymentMethod): View|Factory
     {
         return view('payments.methods.show', compact('paymentMethod'));
     }
 
-    public function edit(PaymentMethod $paymentMethod): View
+    public function edit(PaymentMethod $paymentMethod): View|Factory
     {
         return view('payments.methods.edit', compact('paymentMethod'));
     }

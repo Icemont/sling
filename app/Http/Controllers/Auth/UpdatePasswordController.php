@@ -6,12 +6,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UpdatePasswordRequest;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 
 class UpdatePasswordController extends Controller
 {
-    public function edit()
+    public function edit(): View|Factory
     {
         return view('user.password');
     }

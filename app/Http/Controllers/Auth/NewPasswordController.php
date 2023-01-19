@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,27 +15,15 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
 
 class NewPasswordController extends Controller
 {
-    /**
-     * Display the password reset view.
-     *
-     * @param Request $request
-     * @return View
-     */
-    public function create(Request $request): View
+    public function create(Request $request): View|Factory
     {
         return view('auth.reset-password', ['request' => $request]);
     }
 
     /**
-     * Handle an incoming new password request.
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     *
      * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse

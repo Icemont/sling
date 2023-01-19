@@ -6,12 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserSettingsRequest;
 use App\Services\AuthenticatedUserService;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class UserSettingsController extends Controller
 {
-    public function edit(): View
+    public function edit(): View|Factory
     {
         return view('user.settings', [
             'user' => auth()->user(),

@@ -14,9 +14,11 @@ use App\Repositories\InvoiceRepository;
 use App\Repositories\PaymentMethodRepository;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -26,7 +28,7 @@ class InvoiceController extends Controller
     {
     }
 
-    public function index(ClientRepository $clientRepository): View
+    public function index(ClientRepository $clientRepository): View|Factory
     {
         return view('invoices.index', [
             'invoices' => $this->invoiceRepository->getPaginatedWithRelations(),
@@ -35,12 +37,12 @@ class InvoiceController extends Controller
         ]);
     }
 
-    public function createForm(InvoiceCreateFormRequest $request): RedirectResponse
+    public function createForm(InvoiceCreateFormRequest $request): Redirector|RedirectResponse
     {
         return redirect(route('invoices.create', ['client' => $request->getClientId()]));
     }
 
-    public function create(PaymentMethodRepository $paymentMethodRepository, Client $client): View
+    public function create(PaymentMethodRepository $paymentMethodRepository, Client $client): View|Factory
     {
         return view('invoices.create', [
             'client' => $client,
@@ -65,7 +67,7 @@ class InvoiceController extends Controller
             ]);
     }
 
-    public function show(Invoice $invoice): View
+    public function show(Invoice $invoice): View|Factory
     {
         return view('invoices.show', compact('invoice'));
     }
@@ -79,7 +81,7 @@ class InvoiceController extends Controller
         return $pdf->download(Str::slug($invoice->invoice_number ?? 'invoice') . '.pdf');
     }
 
-    public function edit(PaymentMethodRepository $paymentMethodRepository, Invoice $invoice): View
+    public function edit(PaymentMethodRepository $paymentMethodRepository, Invoice $invoice): View|Factory
     {
         $invoice->load('client');
 

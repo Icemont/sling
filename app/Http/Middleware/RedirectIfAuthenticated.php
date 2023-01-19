@@ -9,6 +9,7 @@ use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
@@ -19,9 +20,9 @@ class RedirectIfAuthenticated
      * @param Request $request
      * @param Closure(Request): (Response|RedirectResponse) $next
      * @param string|null ...$guards
-     * @return Response|RedirectResponse
+     * @return Response|RedirectResponse|Redirector
      */
-    public function handle(Request $request, Closure $next, ...$guards): Response|RedirectResponse
+    public function handle(Request $request, Closure $next, ?string ...$guards): Redirector|Response|RedirectResponse
     {
         $guards = empty($guards) ? [null] : $guards;
 

@@ -8,6 +8,7 @@ use App\Http\Requests\ClientStoreRequest;
 use App\Models\Client;
 use App\Repositories\ClientRepository;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Throwable;
@@ -18,7 +19,7 @@ class ClientController extends Controller
     {
     }
 
-    public function index(): View
+    public function index(): View|Factory
     {
         return view('clients.index', [
             'clients' => $this->clientRepository->getPaginated(),
@@ -40,12 +41,12 @@ class ClientController extends Controller
             ]);
     }
 
-    public function show(Client $client): View
+    public function show(Client $client): View|Factory
     {
         return view('clients.show', compact('client'));
     }
 
-    public function edit(Client $client): View
+    public function edit(Client $client): View|Factory
     {
         return view('clients.edit', compact('client'));
     }

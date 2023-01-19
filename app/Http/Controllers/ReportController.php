@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 
 class ReportController extends Controller
 {
-    public function form(): View
+    public function form(): View|Factory
     {
         return view('reports.form');
     }

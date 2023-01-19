@@ -9,35 +9,25 @@ use App\Models\Currency;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     *
-     * @return View
-     */
-    public function create(): View
+    public function create(): View|Factory
     {
         $currencies = Currency::all();
 
         return view('auth.register', compact('currencies'));
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     *
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): Redirector|RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
