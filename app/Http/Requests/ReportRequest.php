@@ -8,7 +8,6 @@ use App\DataTransferObjects\ReportParametersData;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 
-
 class ReportRequest extends FormRequest
 {
     public function authorize(): bool
