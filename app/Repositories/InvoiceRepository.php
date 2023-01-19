@@ -64,4 +64,35 @@ class InvoiceRepository
             ->orderBy('invoices.payment_date')
             ->get();
     }
+
+    public function getCountsGroupedByStatus(): Collection
+    {
+        return Invoice::select([
+            DB::raw('count(*) as invoices_count'),
+            'is_paid'
+        ])
+            ->groupBy('is_paid')
+            ->get();
+    }
+
+    public function getPaidTotalAmount()
+    {
+        return Invoice::where('is_paid', true)->sum('amount');
+    }
+
+    public function getPaidAmountByDates(CarbonImmutable $dateFrom, CarbonImmutable $dateTo)
+    {
+        return Invoice::where('is_paid', true)
+            ->whereDate('payment_date', '>=', $dateFrom)
+            ->whereDate('payment_date', '<=', $dateTo)
+            ->sum('amount');
+    }
+
+    public function getPaidAmountCurrentMonth()
+    {
+        return Invoice::getPaidAmountByDates(
+            now()->startOfMonth(),
+            now()->endOfMonth()
+        );
+    }
 }
