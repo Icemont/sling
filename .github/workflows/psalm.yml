@@ -1,7 +1,18 @@
 name: Psalm Static analysis
 
-on: [push, pull_request]
-  paths:
+on:
+  push:
+    branches:
+    - main
+    - develop
+    paths:
+    - '**.php'
+    - 'psalm.xml'
+  pull_request:
+    branches:
+    - main
+    - develop
+    paths:
     - '**.php'
     - 'psalm.xml'
 
