@@ -2,6 +2,7 @@
 
 ## Sling - Simple Laravel Invoice Generator
 [![Tests](https://github.com/Icemont/sling/actions/workflows/laravel.yml/badge.svg?branch=main)](https://github.com/Icemont/sling/actions/workflows/laravel.yml)
+[![Psalm Static Analysis](https://github.com/Icemont/sling/actions/workflows/psalm.yml/badge.svg)](https://github.com/Icemont/sling/actions/workflows/psalm.yml)
 [![GitHub license](https://img.shields.io/github/license/Icemont/sling)](https://github.com/Icemont/sling/blob/main/LICENSE)
 
 Sling — open-source web application that helps you create invoices and track income.
