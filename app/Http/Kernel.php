@@ -14,7 +14,7 @@ class Kernel extends HttpKernel
      *
      * @var string
      */
-    const VERSION = '2.0';
+    const VERSION = '3.0';
 
     /**
      * The application's global HTTP middleware stack.
@@ -24,7 +24,6 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
