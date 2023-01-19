@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReportRequest;
-use App\Models\Invoice;
+use App\Repositories\InvoiceRepository;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
 
@@ -17,23 +18,23 @@ class ReportController extends Controller
         return view('reports.form');
     }
 
-    public function create(ReportRequest $request): Response|View
+    public function create(ReportRequest $request, InvoiceRepository $invoiceRepository): View|Factory|Response
     {
-        $params = $request->getPreparedPayload();
-        $invoices = Invoice::getForReport($params['from_date'], $params['to_date']);
+        $reportParameters = $request->getPayload();
+        $invoices = $invoiceRepository->getForReportByDates($reportParameters->dateFrom, $reportParameters->dateTo);
 
-        $data = [
-            'params' => $params,
+        $reportData = [
+            'reportParameters' => $reportParameters,
             'report' => $invoices->groupBy('client_id'),
             'total' => $invoices->sum('amount'),
             'user' => auth()->user(),
         ];
 
-        if ($params['download']) {
-            $pdf = Pdf::loadView('reports.sales-report', $data);
+        if ($reportParameters->download) {
+            $pdf = Pdf::loadView('reports.sales-report', $reportData);
             return $pdf->download('report-' . now()->format('d-m-Y') . '.pdf');
         }
 
-        return view('reports.show', $data);
+        return view('reports.show', $reportData);
     }
 }

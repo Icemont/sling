@@ -7,7 +7,9 @@ namespace App\Repositories;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Models\Invoice;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -39,5 +41,27 @@ class InvoiceRepository
     public function update(Invoice $invoice, InvoiceStoreRequest $request): bool
     {
         return $invoice->update($request->getInvoicePayload());
+    }
+
+    public function getForReportByDates(CarbonImmutable $dateFrom, CarbonImmutable $dateTo): Collection
+    {
+        return Invoice::select([
+            'invoices.payment_date',
+            'invoices.invoice_number',
+            'invoices.amount',
+            'invoices.product_price',
+            'invoices.client_id',
+            'invoices.exchange_rate',
+            'invoices.currency_id',
+            'currencies.code as currency',
+            'clients.name as client_name',
+        ])
+            ->leftJoin('clients', 'invoices.client_id', '=', 'clients.id')
+            ->leftJoin('currencies', 'invoices.currency_id', '=', 'currencies.id')
+            ->where('invoices.is_paid', true)
+            ->whereDate('invoices.payment_date', '>=', $dateFrom)
+            ->whereDate('invoices.payment_date', '<=', $dateTo)
+            ->orderBy('invoices.payment_date')
+            ->get();
     }
 }

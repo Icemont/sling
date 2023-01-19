@@ -4,26 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\DataTransferObjects\ReportParametersData;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Carbon;
+
 
 class ReportRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
@@ -33,12 +25,12 @@ class ReportRequest extends FormRequest
         ];
     }
 
-    public function getPreparedPayload(): array
+    public function getPayload(): ReportParametersData
     {
-        return [
-            'download' => boolval($this->download ?? false),
-            'from_date' => Carbon::createFromFormat('Y-m-d', $this->from_date)->startOfDay(),
-            'to_date' => Carbon::createFromFormat('Y-m-d', $this->to_date)->endOfDay(),
-        ];
+        return new ReportParametersData(
+            boolval($this->download ?? false),
+            CarbonImmutable::createFromFormat('Y-m-d', $this->from_date)->startOfDay(),
+            CarbonImmutable::createFromFormat('Y-m-d', $this->to_date)->endOfDay()
+        );
     }
 }

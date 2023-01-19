@@ -29,8 +29,8 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">{{ __('Sales report :from — :to',[
-    'from' =>  $params['from_date']->format('d.m.Y'),
-    'to' => $params['to_date']->format('d.m.Y')
+    'from' =>  $reportParameters->dateFrom->format('d.m.Y'),
+    'to' => $reportParameters->dateTo->format('d.m.Y')
     ]) }}</h4>
 
                 </div>

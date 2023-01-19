@@ -76,8 +76,8 @@
 <div class="report-box">
     <h1>{{ $user->business->name ?? $user->name ?? 'Sling' }}</h1>
     <h2>{{ __('Sales report :from — :to',[
-        'from' =>  $params['from_date']->format('d.m.Y'),
-        'to' => $params['to_date']->format('d.m.Y')
+        'from' =>  $reportParameters->dateFrom->format('d.m.Y'),
+        'to' => $reportParameters->dateTo->format('d.m.Y')
     ]) }}</h2>
     @if(count($report))
         @foreach($report as $invoices)
