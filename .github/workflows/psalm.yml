@@ -1,4 +1,4 @@
-name: Psalm Static analysis
+name: Psalm Static Analysis
 
 on:
   push:

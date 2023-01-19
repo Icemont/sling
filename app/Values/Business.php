@@ -7,6 +7,9 @@ namespace App\Values;
 use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
 
+/**
+ * @psalm-suppress MissingTemplateParam
+ */
 class Business implements Arrayable, JsonSerializable
 {
     public ?string $name = null;
