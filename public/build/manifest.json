@@ -1,6 +1,6 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.81a2ffbc.js",
+    "file": "assets/app.cf27e21e.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
@@ -8,7 +8,7 @@
     ]
   },
   "resources/js/tabler.js": {
-    "file": "assets/tabler.186503b1.js",
+    "file": "assets/tabler.af93fa40.js",
     "src": "resources/js/tabler.js",
     "isEntry": true,
     "imports": [
@@ -19,7 +19,7 @@
     "file": "assets/_commonjsHelpers.b8add541.js"
   },
   "resources/css/app.css": {
-    "file": "assets/app.1698b13c.css",
+    "file": "assets/app.917c275e.css",
     "src": "resources/css/app.css",
     "isEntry": true
   }
