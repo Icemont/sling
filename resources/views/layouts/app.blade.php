@@ -6,7 +6,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Sling') }}</title>
     @vite(['resources/css/app.css'])
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -19,7 +18,7 @@
         }
     </style>
 </head>
-<body class="theme-{{ Auth::user()->dark_theme ? 'dark' : 'light' }}">
+<body{!! Auth::user()?->dark_theme ? ' data-bs-theme="dark"' : '' !!}>
 @include('layouts.navigation')
 <div class="page">
     <div class="page-wrapper">
