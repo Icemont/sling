@@ -63,6 +63,7 @@ class ClientRepository
     public function deleteWithAddress(Client $client): ?bool
     {
         $client->address()->delete();
+
         return $client->delete();
     }
 }

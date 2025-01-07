@@ -21,6 +21,7 @@ class ExchangeRatesServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ExchangeRatesService::class, function ($app) {
             $user = auth()->user();
+
             return match ($user ? Str::upper($user->getCurrencyCode()) : '') {
                 NBGExchangeRatesService::BASE_CURRENCY => new NBGExchangeRatesService(),
                 default => new FakeExchangeRatesService(),

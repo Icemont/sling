@@ -32,6 +32,7 @@ class ReportController extends Controller
 
         if ($reportParameters->download) {
             $pdf = Pdf::loadView('reports.sales-report', $reportData);
+
             return $pdf->download('report-' . now()->format('d-m-Y') . '.pdf');
         }
 

@@ -63,7 +63,7 @@ class InvoiceController extends Controller
             ->route('invoices.index')
             ->with([
                 'status' => __('New invoice ":invoice" successfully added!', ['invoice' => $invoice->invoice_number]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -106,7 +106,7 @@ class InvoiceController extends Controller
             ->route('invoices.index')
             ->with([
                 'status' => __('Invoice ":invoice" successfully updated!', ['invoice' => $invoice->invoice_number]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -121,7 +121,7 @@ class InvoiceController extends Controller
 
         return redirect()->route('invoices.index')->with([
             'status' => __('Invoice ":invoice" deleted!', ['invoice' => $invoice->invoice_number]),
-            'type' => 'info'
+            'type' => 'info',
         ]);
     }
 }

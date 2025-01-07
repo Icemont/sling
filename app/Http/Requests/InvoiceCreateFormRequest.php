@@ -29,6 +29,6 @@ class InvoiceCreateFormRequest extends FormRequest
 
     public function getClientId(): int
     {
-        return (int)$this->validated('client');
+        return (int) $this->validated('client');
     }
 }

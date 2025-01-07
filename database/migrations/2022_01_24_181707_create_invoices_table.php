@@ -21,14 +21,14 @@ class CreateInvoicesTable extends Migration
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->boolean('is_paid')->default(false)->index();
             $table->string('product_name', 150);
-            $table->decimal('product_price',12, 2);
+            $table->decimal('product_price', 12, 2);
             $table->date('invoice_date')->index();
             $table->date('payment_date')->nullable()->index();
             $table->string('invoice_number', 25);
             $table->unique(['invoice_number', 'client_id'], 'invoice_number');
             $table->unsignedBigInteger('payment_method_id')->nullable();
             $table->foreign('payment_method_id')->references('id')->on('payment_methods');
-            $table->decimal('amount',20, 6)->nullable();
+            $table->decimal('amount', 20, 6)->nullable();
             $table->unsignedSmallInteger('currency_id')->nullable();
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->decimal('exchange_rate', 11, 6)->nullable();

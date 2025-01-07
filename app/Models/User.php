@@ -54,7 +54,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'dark_theme' => 'boolean',
     ];
 
-
     public function clients(): HasMany
     {
         return $this->hasMany(Client::class);

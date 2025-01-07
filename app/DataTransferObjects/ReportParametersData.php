@@ -9,10 +9,9 @@ use Carbon\CarbonImmutable;
 class ReportParametersData
 {
     public function __construct(
-        readonly public bool            $download,
+        readonly public bool $download,
         readonly public CarbonImmutable $dateFrom,
         readonly public CarbonImmutable $dateTo
-    )
-    {
+    ) {
     }
 }

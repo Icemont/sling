@@ -70,7 +70,7 @@ class InvoiceRepository
     {
         return Invoice::select([
             DB::raw('count(*) as invoices_count'),
-            'is_paid'
+            'is_paid',
         ])
             ->groupBy('is_paid')
             ->get();

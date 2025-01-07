@@ -40,7 +40,7 @@ class PaymentMethodController extends Controller
                 'status' => __('New payment method ":method" successfully added!', [
                     'method' => $paymentMethod->name,
                 ]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -69,7 +69,7 @@ class PaymentMethodController extends Controller
                 'status' => __('Payment method ":method" successfully updated!', [
                     'method' => $paymentMethod->name,
                 ]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -85,7 +85,7 @@ class PaymentMethodController extends Controller
                 'status' => __('Payment method ":method" is used by invoices and cannot be deleted!', [
                     'method' => $paymentMethod->name,
                 ]),
-                'type' => 'danger'
+                'type' => 'danger',
             ]);
         }
 
@@ -93,7 +93,7 @@ class PaymentMethodController extends Controller
 
         return redirect()->route('payment-methods.index')->with([
             'status' => __('Payment method ":method" deleted!', ['method' => $paymentMethod->name]),
-            'type' => 'info'
+            'type' => 'info',
         ]);
     }
 }

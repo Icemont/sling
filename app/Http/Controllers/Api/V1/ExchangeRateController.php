@@ -17,7 +17,7 @@ class ExchangeRateController extends Controller
         $date = Carbon::createFromFormat('Y-m-d', $date) ?? now();
 
         return response()->json([
-            'rate' => $service->getExchangeRate($currency, $date)
+            'rate' => $service->getExchangeRate($currency, $date),
         ]);
     }
 }

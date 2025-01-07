@@ -20,17 +20,16 @@ class UserSettingsController extends Controller
     }
 
     public function update(
-        UserSettingsRequest      $request,
+        UserSettingsRequest $request,
         AuthenticatedUserService $authenticatedUserService
-    ): RedirectResponse
-    {
+    ): RedirectResponse {
         $authenticatedUserService->updateProfileWithAddress($request);
 
         return redirect()
             ->route('user.settings.edit')
             ->with([
                 'status' => __('Profile settings successfully updated!'),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 }

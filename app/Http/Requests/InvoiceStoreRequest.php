@@ -65,7 +65,7 @@ class InvoiceStoreRequest extends FormRequest
 
     public function getInvoicePayload($forCreating = false): array
     {
-        $isPaid = (bool)$this->is_paid;
+        $isPaid = (bool) $this->is_paid;
         $isLocalCurrency = ($this->user()->currency_id == $this->currency_id);
 
         return collect($this->validated())
@@ -91,13 +91,13 @@ class InvoiceStoreRequest extends FormRequest
                     ])
                     ->when($isLocalCurrency, function ($payload) {
                         return $payload->merge([
-                            'amount' => (float)$this->product_price,
+                            'amount' => (float) $this->product_price,
                         ]);
                     })
                     ->unless($isLocalCurrency, function ($payload) {
                         return $payload->merge([
-                            'exchange_rate' => (float)$this->exchange_rate,
-                            'amount' => (float)$this->product_price * (float)$this->exchange_rate,
+                            'exchange_rate' => (float) $this->exchange_rate,
+                            'amount' => (float) $this->product_price * (float) $this->exchange_rate,
                         ]);
                     });
             })

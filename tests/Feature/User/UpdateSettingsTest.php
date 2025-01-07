@@ -64,8 +64,8 @@ class UpdateSettingsTest extends TestCase
         );
 
         $response->assertSessionHasErrors([
-            "name", "business.name", "phone",
-            "country", "city", "street1",
+            'name', 'business.name', 'phone',
+            'country', 'city', 'street1',
         ]);
     }
 

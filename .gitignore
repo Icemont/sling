@@ -13,7 +13,9 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/.phpunit.cache
 /.phpstorm.meta.php
+/.php-cs-fixer.cache
 /_ide_helper_models.php
 /_ide_helper.php
 /storage/debugbar/

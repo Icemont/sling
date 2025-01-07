@@ -33,7 +33,7 @@ class NBGExchangeRatesService implements ExchangeRatesService
     {
         $cache_key = self::CACHE_PREFIX . '.' . $currency->code . '.' . $date->format('Ymd');
 
-        return (float)Cache::remember($cache_key, 3600, function () use ($currency, $date) {
+        return (float) Cache::remember($cache_key, 3600, function () use ($currency, $date) {
             return $this->getFromEndpoint($currency, $date);
         });
     }

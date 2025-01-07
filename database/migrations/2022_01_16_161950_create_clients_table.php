@@ -27,7 +27,6 @@ class CreateClientsTable extends Migration
             $table->unsignedInteger('invoice_index')->default(1);
             $table->text('note')->nullable();
             $table->timestamps();
-
         });
     }
 

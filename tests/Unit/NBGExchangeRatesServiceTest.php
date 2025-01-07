@@ -42,8 +42,8 @@ class NBGExchangeRatesServiceTest extends TestCase
                             'code' => 'USD',
                             'quantity' => 1,
                             'rate' => $this->test_value,
-                        ] : []
-                    ]
+                        ] : [],
+                    ],
                 ]],
                 200,
                 []
@@ -66,7 +66,6 @@ class NBGExchangeRatesServiceTest extends TestCase
 
         $this->assertEquals($this->test_value, $rate);
     }
-
 
     /**
      * Test NBGExchangeRatesService uses the cache

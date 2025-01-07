@@ -42,7 +42,7 @@ class SlingInstall extends Command
         $this->line('Adding initial data to the database:');
 
         $exe_code = $this->call('db:seed', [
-            'class' => 'CurrenciesSeeder'
+            'class' => 'CurrenciesSeeder',
         ]);
 
         $this->info('Sling installation completed.');

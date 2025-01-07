@@ -13,6 +13,7 @@ use JsonSerializable;
 class Business implements Arrayable, JsonSerializable
 {
     public ?string $name = null;
+
     public ?string $code = null;
 
     private function __construct(?string $name, ?string $code)

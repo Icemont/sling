@@ -17,7 +17,7 @@ class BusinessCast implements CastsAttributes
 
     public function set($model, string $key, $value, array $attributes): ?string
     {
-        $value = Arr::only((array)$value, ['name', 'code']);
+        $value = Arr::only((array) $value, ['name', 'code']);
 
         return json_encode($value ?: []);
     }

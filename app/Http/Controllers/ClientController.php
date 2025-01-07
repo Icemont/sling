@@ -37,7 +37,7 @@ class ClientController extends Controller
             ->route('clients.index')
             ->with([
                 'status' => __('New client ":client" successfully added!', ['client' => $client->name]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -65,7 +65,7 @@ class ClientController extends Controller
             ->route('clients.index')
             ->with([
                 'status' => __('Client ":client" successfully updated!', ['client' => $client->name]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -80,7 +80,7 @@ class ClientController extends Controller
 
         return redirect()->route('clients.index')->with([
             'status' => __('Client ":client" deleted!', ['client' => $client->name]),
-            'type' => 'info'
+            'type' => 'info',
         ]);
     }
 }
