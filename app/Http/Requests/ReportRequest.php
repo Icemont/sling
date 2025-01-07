@@ -24,7 +24,7 @@ class ReportRequest extends FormRequest
         ];
     }
 
-    public function getPayload(): ReportParametersData
+    public function getValidatedPayload(): ReportParametersData
     {
         return new ReportParametersData(
             boolval($this->download ?? false),

@@ -20,7 +20,7 @@ class ReportController extends Controller
 
     public function create(ReportRequest $request, InvoiceRepository $invoiceRepository): View|Factory|Response
     {
-        $reportParameters = $request->getPayload();
+        $reportParameters = $request->getValidatedPayload();
         $invoices = $invoiceRepository->getForReportByDates($reportParameters->dateFrom, $reportParameters->dateTo);
 
         $reportData = [
