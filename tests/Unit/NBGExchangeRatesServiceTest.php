@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Models\Currency;
+use App\Enums\Currency;
 use App\Services\NBGExchangeRatesService;
 use Closure;
 use Illuminate\Support\Carbon;
@@ -16,8 +16,6 @@ class NBGExchangeRatesServiceTest extends TestCase
 {
     private NBGExchangeRatesService $service;
 
-    private Currency $currency;
-
     private Carbon $date;
 
     private float $test_value = 2.0;
@@ -27,15 +25,14 @@ class NBGExchangeRatesServiceTest extends TestCase
         parent::setUp();
 
         $this->service = new NBGExchangeRatesService();
-        $this->currency = new Currency();
         $this->date = now();
     }
 
     protected function setFakeHttpResponse(bool $valid = true): void
     {
         Http::fake([
-            'nbg.gov.ge/*' => Http::response(
-                [[
+            'nbg.gov.ge/*' => Http::response([
+                [
                     'date' => $this->date->toDateTimeString(),
                     'currencies' => [
                         $valid ? [
@@ -44,10 +41,8 @@ class NBGExchangeRatesServiceTest extends TestCase
                             'rate' => $this->test_value,
                         ] : [],
                     ],
-                ]],
-                200,
-                []
-            ),
+                ],
+            ]),
         ]);
     }
 
@@ -60,9 +55,7 @@ class NBGExchangeRatesServiceTest extends TestCase
     {
         $this->setFakeHttpResponse();
 
-        $this->currency->code = 'USD';
-
-        $rate = $this->service->getExchangeRate($this->currency, $this->date);
+        $rate = $this->service->getExchangeRate(Currency::USD, $this->date);
 
         $this->assertEquals($this->test_value, $rate);
     }
@@ -76,13 +69,11 @@ class NBGExchangeRatesServiceTest extends TestCase
     {
         $this->setFakeHttpResponse();
 
-        $this->currency->code = 'USD';
-
         Cache::shouldReceive('remember')
             ->once()
             ->with('nbg.USD.' . $this->date->format('Ymd'), 3600, Closure::class);
 
-        $this->service->getExchangeRate($this->currency, $this->date);
+        $this->service->getExchangeRate(Currency::USD, $this->date);
     }
 
     /**
@@ -94,9 +85,7 @@ class NBGExchangeRatesServiceTest extends TestCase
     {
         $this->setFakeHttpResponse();
 
-        $this->currency->code = 'GEL';
-
-        $rate = $this->service->getExchangeRate($this->currency, $this->date);
+        $rate = $this->service->getExchangeRate(Currency::GEL, $this->date);
 
         $this->assertEquals(1.0, $rate);
     }
@@ -110,9 +99,7 @@ class NBGExchangeRatesServiceTest extends TestCase
     {
         $this->setFakeHttpResponse();
 
-        $this->currency->code = 'EUR';
-
-        $rate = $this->service->getExchangeRate($this->currency, $this->date);
+        $rate = $this->service->getExchangeRate(Currency::EUR, $this->date);
 
         $this->assertEquals(null, $rate);
     }
@@ -126,9 +113,7 @@ class NBGExchangeRatesServiceTest extends TestCase
     {
         $this->setFakeHttpResponse(false);
 
-        $this->currency->code = 'USD';
-
-        $rate = $this->service->getExchangeRate($this->currency, $this->date);
+        $rate = $this->service->getExchangeRate(Currency::USD, $this->date);
 
         $this->assertEquals(null, $rate);
     }

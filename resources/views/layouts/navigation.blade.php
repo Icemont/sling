@@ -118,7 +118,7 @@
                         </x-slot>
                         {{ __('Reports') }}
                     </x-nav-link>
-                    <li class="nav-item dropdown{{ request()->routeIs(['payment-methods.*', 'user.settings.edit']) ? ' active' : '' }}">
+                    <li class="nav-item dropdown{{ request()->routeIs(['payment-methods.*', 'user.settings.*']) ? ' active' : '' }}">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
                            data-bs-auto-close="outside" role="button" aria-expanded="false">
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -148,7 +148,7 @@
                                 </span>
                                 {{ __('Payment Methods') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('user.settings.edit') }}">
+                            <a class="dropdown-item" href="{{ route('user.settings.show') }}">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="icon icon-tabler icon-tabler-user-circle" width="24" height="24"

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
-use App\Models\Currency;
+use App\Enums\Currency;
 use Illuminate\Support\Carbon;
 
 interface ExchangeRatesService

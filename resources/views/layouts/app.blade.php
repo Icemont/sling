@@ -30,7 +30,6 @@
 <div class="page">
     <div class="page-wrapper">
         <div class="container-xl">
-            <!-- Page title -->
             <div class="page-header d-print-none">
                 <div class="row align-items-center">
                     <div class="col">
@@ -41,6 +40,9 @@
         </div>
         <div class="page-body">
             <div class="container-xl">
+                @if (session('status'))
+                    <x-alert :type="session('type')" :message="session('status')" class="mb-2"/>
+                @endif
                 {{ $slot }}
             </div>
         </div>

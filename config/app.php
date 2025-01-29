@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\Currency;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -139,7 +140,7 @@ return [
         'payment_methods' => 25,
     ],
 
-    'default_currency' => 'GEL',
+    'default_currency' => Currency::tryFrom((int) env('DEFAULT_CURRENCY_ID')) ?? Currency::GEL,
     'invoice_index_length' => 5,
 
     /*

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Auth;
 
-use App\Models\Currency;
+use App\Enums\Currency;
 use App\Providers\RouteServiceProvider;
-use Database\Seeders\CurrenciesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,12 +22,10 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
-        $this->seed(CurrenciesSeeder::class);
-
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'currency' => Currency::first()->id,
+            'currency' => Currency::getRandom()->value,
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);

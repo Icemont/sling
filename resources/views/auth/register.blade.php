@@ -3,7 +3,6 @@
         <x-slot name="logo">
             <x-application-logo/>
         </x-slot>
-        <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-2" :errors="$errors"/>
         <form class="card card-md" method="POST" action="{{ route('register') }}">
             <div class="card-body">
@@ -20,9 +19,9 @@
                 <div class="mb-3">
                     <x-label for="currency" :value="__('Currency')"/>
                     <select id="currency" class="form-select" name="currency">
-                        @foreach($currencies as $currency)
-                            <option value="{{ $currency->id }}"{!!  $currency->code == config('app.default_currency')
-                                ? ' selected="selected"' : '' !!}>{{ $currency->name }}</option>
+                        @foreach(\App\Enums\Currency::cases() as $currency)
+                            <x-option :value="$currency->value" name="{{ $currency->name() }} ({{ $currency->code() }})"
+                                      :selected="old('currency', $currency == config('app.default_currency'))"/>
                         @endforeach
                     </select>
                 </div>

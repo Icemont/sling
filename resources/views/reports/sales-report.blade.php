@@ -97,13 +97,13 @@
                             @endif
                         </td>
                         <td>
-                            {{ $invoice->amount }} {{ $user->currency->code }}
+                            {{ $invoice->amount }} {{ $user->currency->code() }}
                         </td>
                     </tr>
                     @if($loop->last)
                         <tr class="border-top">
                             <td colspan="2">
-                                <div class="subtotal"><strong>{{ $invoices->sum('amount') }} {{ $user->currency->code }}</strong></div>
+                                <div class="subtotal"><strong>{{ $invoices->sum('amount') }} {{ $user->currency->code() }}</strong></div>
                             </td>
                         </tr>
                     @endif
@@ -114,7 +114,7 @@
                     <tr class="bg-primary">
                         <th>{{ __('Total') }}</th>
                         <td>
-                            <strong>{{ number_format($total, 2) }} {{ $user->currency->code }}</strong>
+                            <strong>{{ number_format($total, 2) }} {{ $user->currency->code() }}</strong>
                         </td>
                     </tr>
                 </table>

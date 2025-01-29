@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\ExchangeRatesService;
-use App\Models\Currency;
+use App\Enums\Currency;
 use Illuminate\Support\Carbon;
 
 class FakeExchangeRatesService implements ExchangeRatesService

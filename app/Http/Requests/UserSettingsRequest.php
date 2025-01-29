@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Data\UserProfileData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserSettingsRequest extends FormRequest
@@ -30,28 +31,20 @@ class UserSettingsRequest extends FormRequest
         ];
     }
 
-    public function getUserProfilePayload(): array
+    public function getProfileData(): UserProfileData
     {
-        return collect($this->validated())
-            ->only([
-                'name',
-                'business',
-                'phone',
-            ])
-            ->toArray();
-    }
+        $profile = $this->validated();
 
-    public function getUserAddressPayload(): array
-    {
-        return collect($this->validated())
-            ->only([
-                'street1',
-                'street2',
-                'city',
-                'state',
-                'country',
-                'zip',
-            ])
-            ->toArray();
+        return new UserProfileData(
+            $profile['name'],
+            $profile['business'],
+            $profile['phone'],
+            $profile['country'],
+            $profile['state'] ?? null,
+            $profile['city'],
+            $profile['zip'] ?? null,
+            $profile['street1'],
+            $profile['street2'] ?? null
+        );
     }
 }

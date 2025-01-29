@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\ExchangeRatesService;
-use App\Models\Currency;
+use App\Enums\Currency;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -22,7 +23,7 @@ class NBGExchangeRatesService implements ExchangeRatesService
 
     public function getExchangeRate(Currency $currency, Carbon $date): ?float
     {
-        if ($currency->code == self::BASE_CURRENCY) {
+        if ($currency->code() == self::BASE_CURRENCY) {
             return 1.0;
         }
 
@@ -31,7 +32,7 @@ class NBGExchangeRatesService implements ExchangeRatesService
 
     private function getCachedRate(Currency $currency, Carbon $date): ?float
     {
-        $cache_key = self::CACHE_PREFIX . '.' . $currency->code . '.' . $date->format('Ymd');
+        $cache_key = self::CACHE_PREFIX . '.' . $currency->code() . '.' . $date->format('Ymd');
 
         return (float) Cache::remember($cache_key, 3600, function () use ($currency, $date) {
             return $this->getFromEndpoint($currency, $date);
@@ -40,13 +41,14 @@ class NBGExchangeRatesService implements ExchangeRatesService
 
     /**
      * @throws RequestException
+     * @throws ConnectionException
      */
     private function getFromEndpoint(Currency $currency, Carbon $date): ?float
     {
         $data = Http::acceptJson()
             ->timeout(5)
             ->get(self::API_ENDPOINT, [
-                'currencies' => $currency->code,
+                'currencies' => $currency->code(),
                 'date' => $date->format('Y-m-d'),
             ])
             ->throw()
@@ -56,7 +58,7 @@ class NBGExchangeRatesService implements ExchangeRatesService
             return null;
         }
 
-        if (Arr::get($data, '0.currencies.0.code') != $currency->code) {
+        if (Arr::get($data, '0.currencies.0.code') != $currency->code()) {
             return null;
         }
 

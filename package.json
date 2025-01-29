@@ -7,10 +7,10 @@
     "devDependencies": {
         "axios": "^1.7.9",
         "laravel-vite-plugin": "^0.8.1",
-        "vite": "^4.5.5"
+        "vite": "^4.5.9"
     },
     "dependencies": {
-        "@tabler/core": "^1.0.0-beta21",
+        "@tabler/core": "^1.0.0",
         "jquery": "^3.7.1",
         "litepicker": "^2.0.12"
     }

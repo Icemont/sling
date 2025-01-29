@@ -18,7 +18,7 @@ class InvoiceRepository
 {
     public function getPaginatedWithRelations(int $perPage = 25): LengthAwarePaginator
     {
-        return Invoice::with(['client', 'currency'])
+        return Invoice::with(['client'])
             ->orderByDesc('id')
             ->paginate(config('app.per_page.invoices', $perPage));
     }

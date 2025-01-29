@@ -6,7 +6,9 @@ namespace Tests\Feature\User;
 
 use App\Models\User;
 use Database\Factories\UserFactory;
+use Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use JsonException;
 use Tests\TestCase;
 
 class UpdatePasswordTest extends TestCase
@@ -37,6 +39,7 @@ class UpdatePasswordTest extends TestCase
 
     /**
      * @return void
+     * @throws JsonException
      */
     public function test_user_can_update_password(): void
     {
@@ -50,7 +53,7 @@ class UpdatePasswordTest extends TestCase
         );
 
         $this->user->refresh();
-        $this->assertTrue(\Hash::check(self::NEW_PASSWORD, $this->user->password));
+        $this->assertTrue(Hash::check(self::NEW_PASSWORD, $this->user->password));
 
         $response->assertSessionHasNoErrors();
         $response->assertSessionHasAll([

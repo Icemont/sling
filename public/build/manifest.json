@@ -3,7 +3,7 @@
     "file": "assets/_commonjsHelpers-725317a4.js"
   },
   "resources/css/app.css": {
-    "file": "assets/app-6c497c03.css",
+    "file": "assets/app-1849764c.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
@@ -16,7 +16,7 @@
     "src": "resources/js/app.js"
   },
   "resources/js/tabler.js": {
-    "file": "assets/tabler-c53d6ed1.js",
+    "file": "assets/tabler-44039840.js",
     "imports": [
       "__commonjsHelpers-725317a4.js"
     ],

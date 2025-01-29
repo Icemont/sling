@@ -65,8 +65,8 @@
                                         <td>
                                             <a href="{{ route('invoices.show', ['invoice' => $invoice->id]) }}">{{ $invoice->invoice_number }}</a>
                                         </td>
-                                        <td class="text-muted">{{ $invoice->product_price }} {{ $invoice->currency->code }}</td>
-                                        <td class="text-muted">{{ round($invoice->amount ?? 0, 2) }} {{ $user->currency->code }}</td>
+                                        <td class="text-muted">{{ $invoice->product_price }} {{ $invoice->currency->code() }}</td>
+                                        <td class="text-muted">{{ round($invoice->amount ?? 0, 2) }} {{ $user->currency->code() }}</td>
                                         <td>
                                             <a href="{{ route('clients.show', ['client' => $invoice->client->id]) }}">{{ $invoice->client->name }}</a>
                                         </td>

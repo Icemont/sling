@@ -12,21 +12,26 @@ use Illuminate\Http\RedirectResponse;
 
 class UserSettingsController extends Controller
 {
-    public function edit(): View|Factory
+    public function show(): View|Factory
     {
-        return view('user.settings', [
+        return view('user.settings-show', [
             'user' => auth()->user(),
         ]);
     }
 
-    public function update(
-        UserSettingsRequest $request,
-        AuthenticatedUserService $authenticatedUserService
-    ): RedirectResponse {
-        $authenticatedUserService->updateProfileWithAddress($request);
+    public function edit(): View|Factory
+    {
+        return view('user.settings-edit', [
+            'user' => auth()->user(),
+        ]);
+    }
+
+    public function update(UserSettingsRequest $request, AuthenticatedUserService $userService): RedirectResponse
+    {
+        $userService->updateProfileWithAddress($request->getProfileData());
 
         return redirect()
-            ->route('user.settings.edit')
+            ->route('user.settings.show')
             ->with([
                 'status' => __('Profile settings successfully updated!'),
                 'type' => 'success',

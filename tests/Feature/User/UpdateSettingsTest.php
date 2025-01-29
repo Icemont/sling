@@ -33,7 +33,7 @@ class UpdateSettingsTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $response->assertViewIs('user.settings');
+        $response->assertViewIs('user.settings-edit');
     }
 
     /**

@@ -45,7 +45,8 @@ Route::middleware(['auth', 'verified'])->group(static function () {
         Route::put('/password', [UpdatePasswordController::class, 'update'])->name('password.update');
 
         Route::middleware(['password.confirm'])->group(static function () {
-            Route::get('/settings', [UserSettingsController::class, 'edit'])->name('settings.edit');
+            Route::get('/settings', [UserSettingsController::class, 'show'])->name('settings.show');
+            Route::get('/settings/edit', [UserSettingsController::class, 'edit'])->name('settings.edit');
             Route::put('/settings', [UserSettingsController::class, 'update'])->name('settings.update');
         });
     });

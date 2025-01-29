@@ -47,10 +47,10 @@
                                         </div>
                                         <div class="col-5">
                                             <select id="currency" class="form-select" name="currency_id">
-                                                @foreach($currencies as $currency)
-                                                    <option value="{{ $currency->id }}" data-code="{{ $currency->code }}"{!! $currency->id == ( old('currency_id') ?? $user->currency_id ?? '1')
-                                ? ' selected="selected"' : '' !!}>{{ $currency->symbol }} ({{ $currency->code }})
-                                                    </option>
+                                                @foreach(\App\Enums\Currency::cases() as $currency)
+                                                    <x-option :value="$currency->value" name="{{ $currency->symbol() }} ({{ $currency->code() }})"
+                                                              data-code="{{ $currency->code() }}"
+                                                              :selected="old('currency_id', $user->currency_idx)"/>
                                                 @endforeach
                                             </select>
                                         </div>

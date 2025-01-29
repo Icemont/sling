@@ -13,11 +13,6 @@ class AppServiceProvider extends ServiceProvider
 {
     use AuthenticatedUser;
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
     public function register(): void
     {
         $this->app->singleton(AuthenticatedUserService::class, function () {
@@ -27,11 +22,6 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
     public function boot(): void
     {
         Paginator::useBootstrap();

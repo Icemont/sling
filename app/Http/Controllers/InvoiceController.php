@@ -47,7 +47,6 @@ class InvoiceController extends Controller
         return view('invoices.create', [
             'client' => $client,
             'user' => auth()->user(),
-            'currencies' => Currency::all(),
             'payment_methods' => $paymentMethodRepository->getActiveForSelector(),
         ]);
     }
@@ -88,7 +87,6 @@ class InvoiceController extends Controller
         return view('invoices.edit', [
             'invoice' => $invoice,
             'user' => auth()->user(),
-            'currencies' => Currency::all(),
             'payment_methods' => $paymentMethodRepository->getActiveForSelector(),
         ]);
     }
