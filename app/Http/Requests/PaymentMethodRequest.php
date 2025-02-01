@@ -31,9 +31,9 @@ class PaymentMethodRequest extends FormRequest
         return collect($this->validated())
             ->only([
                 'name',
-                'is_active',
             ])
             ->merge([
+                'is_active' => (bool) $this->input('is_active'),
                 'attributes' => isset($this->method_attributes) ?
                     array_combine($this->method_attributes['keys'], $this->method_attributes['values']) : [],
             ])

@@ -21,7 +21,7 @@ class PaymentMethodController extends Controller
     public function index(): View|Factory
     {
         return view('payments.methods.index', [
-            'payment_methods' => $this->paymentMethodRepository->getPaginated(),
+            'paymentMethods' => $this->paymentMethodRepository->getPaginated(),
         ]);
     }
 
