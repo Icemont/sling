@@ -32,7 +32,8 @@ class PaymentMethodController extends Controller
 
     public function store(PaymentMethodRequest $request): RedirectResponse
     {
-        $paymentMethod = $this->paymentMethodRepository->create($request);
+        $paymentMethod = $this->paymentMethodRepository
+            ->create($request->getPaymentMethodData(true));
 
         return redirect()
             ->route('payment-methods.index')
@@ -61,7 +62,8 @@ class PaymentMethodController extends Controller
     {
         $this->authorize('owner', $paymentMethod);
 
-        $this->paymentMethodRepository->updatePaymentMethod($paymentMethod, $request);
+        $this->paymentMethodRepository
+            ->updatePaymentMethod($paymentMethod, $request->getPaymentMethodData());
 
         return redirect()
             ->route('payment-methods.index')

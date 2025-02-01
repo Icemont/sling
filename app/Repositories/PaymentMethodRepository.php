@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Data\PaymentMethodData;
 use App\Http\Requests\PaymentMethodRequest;
 use App\Models\PaymentMethod;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,16 +17,23 @@ class PaymentMethodRepository
         return PaymentMethod::active()->get(['id', 'name']);
     }
 
-    public function create(PaymentMethodRequest $request): PaymentMethod
+    public function create(PaymentMethodData $paymentMethodData): PaymentMethod
     {
-        return PaymentMethod::create(
-            $request->getPaymentMethodPayload(true)
-        );
+        return PaymentMethod::create([
+            'name' => $paymentMethodData->name,
+            'attributes' => $paymentMethodData->attributes,
+            'is_active' => $paymentMethodData->isActive,
+            'user_id' => $paymentMethodData->userId,
+        ]);
     }
 
-    public function updatePaymentMethod(PaymentMethod $paymentMethod, PaymentMethodRequest $request): bool
+    public function updatePaymentMethod(PaymentMethod $paymentMethod, PaymentMethodData $paymentMethodData): bool
     {
-        return $paymentMethod->update($request->getPaymentMethodPayload());
+        return $paymentMethod->update([
+            'name' => $paymentMethodData->name,
+            'attributes' => $paymentMethodData->attributes,
+            'is_active' => $paymentMethodData->isActive,
+        ]);
     }
 
     public function getPaginated(int $perPage = 25): LengthAwarePaginator

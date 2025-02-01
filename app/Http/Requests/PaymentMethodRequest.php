@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Data\PaymentMethodData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PaymentMethodRequest extends FormRequest
@@ -26,21 +27,16 @@ class PaymentMethodRequest extends FormRequest
         ];
     }
 
-    public function getPaymentMethodPayload($forCreating = false): array
+    public function getPaymentMethodData($forCreating = false): PaymentMethodData
     {
-        return collect($this->validated())
-            ->only([
-                'name',
-            ])
-            ->merge([
-                'is_active' => (bool) $this->input('is_active'),
-                'attributes' => isset($this->method_attributes) ?
-                    array_combine($this->method_attributes['keys'], $this->method_attributes['values']) : [],
-            ])
-            ->when($forCreating, function ($payload) {
-                return $payload->merge(['user_id' => $this->user()->id]);
-            })
-            ->toArray();
+        $attributes = $this->input('method_attributes');
+
+        return new PaymentMethodData(
+            $this->input('name'),
+            is_array($attributes) ? array_combine($attributes['keys'], $attributes['values']) : [],
+            (bool) $this->input('is_active'),
+            $forCreating ? $this->user()->id : null
+        );
     }
 
     public function messages(): array
