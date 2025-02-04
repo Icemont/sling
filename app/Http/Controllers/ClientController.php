@@ -41,7 +41,7 @@ class ClientController extends Controller
      */
     public function store(ClientStoreRequest $request): RedirectResponse
     {
-        $client = $this->clientRepository->createWithAddress($request);
+        $client = $this->clientRepository->createWithAddress($request->getClientData());
 
         return redirect()
             ->route('clients.index')
@@ -64,7 +64,7 @@ class ClientController extends Controller
     {
         $this->authorize('owner', $client);
 
-        $this->clientRepository->updateWithAddress($client, $request);
+        $this->clientRepository->updateWithAddress($client, $request->getClientData());
 
         return redirect()
             ->route('clients.index')
@@ -75,7 +75,7 @@ class ClientController extends Controller
     }
 
     /**
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
     public function destroy(Client $client): RedirectResponse
     {

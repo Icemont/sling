@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Data\AddressData;
 use App\Data\UserProfileData;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,7 @@ readonly class AuthenticatedUserService
     public function updateProfileWithAddress(UserProfileData $profileData): User
     {
         $this->updateProfile($profileData);
-        $this->updateAddress($profileData);
+        $this->updateAddress($profileData->address);
 
         return $this->user;
     }
@@ -32,15 +33,15 @@ readonly class AuthenticatedUserService
         ]);
     }
 
-    public function updateAddress(UserProfileData $profileData): Model
+    public function updateAddress(AddressData $addressData): Model
     {
         return $this->user->upsertAddress([
-            'street1' => $profileData->street1,
-            'street2' => $profileData->street2,
-            'city' => $profileData->city,
-            'state' => $profileData->state,
-            'country' => $profileData->country,
-            'zip' => $profileData->zip,
+            'street1' => $addressData->street1,
+            'street2' => $addressData->street2,
+            'city' => $addressData->city,
+            'state' => $addressData->state,
+            'country' => $addressData->country,
+            'zip' => $addressData->zip,
         ]);
     }
 

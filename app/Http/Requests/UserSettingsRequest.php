@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Data\AddressData;
 use App\Data\UserProfileData;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -35,16 +36,20 @@ class UserSettingsRequest extends FormRequest
     {
         $profile = $this->validated();
 
-        return new UserProfileData(
-            $profile['name'],
-            $profile['business'],
-            $profile['phone'],
+        $address = new AddressData(
             $profile['country'],
             $profile['state'] ?? null,
             $profile['city'],
             $profile['zip'] ?? null,
             $profile['street1'],
             $profile['street2'] ?? null
+        );
+
+        return new UserProfileData(
+            $profile['name'],
+            $profile['business'],
+            $profile['phone'],
+            $address
         );
     }
 }

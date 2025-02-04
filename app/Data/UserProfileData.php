@@ -10,12 +10,7 @@ readonly class UserProfileData
         public string $name,
         public array $business,
         public string $phone,
-        public string $country,
-        public ?string $state,
-        public string $city,
-        public ?string $zip,
-        public string $street1,
-        public ?string $street2
+        public ?AddressData $address,
     ) {
     }
 }
