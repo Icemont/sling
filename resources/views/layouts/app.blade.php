@@ -70,6 +70,6 @@
     </div>
 </div>
 @vite(['resources/js/app.js', 'resources/js/tabler.js'])
-
+@stack('body-end')
 </body>
 </html>

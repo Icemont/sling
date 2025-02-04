@@ -26,6 +26,16 @@ class ClientController extends Controller
         ]);
     }
 
+    public function show(Client $client): View|Factory
+    {
+        return view('clients.show', compact('client'));
+    }
+
+    public function create(): View|Factory
+    {
+        return view('clients.create');
+    }
+
     /**
      * @throws Throwable
      */
@@ -39,11 +49,6 @@ class ClientController extends Controller
                 'status' => __('New client ":client" successfully added!', ['client' => $client->name]),
                 'type' => 'success',
             ]);
-    }
-
-    public function show(Client $client): View|Factory
-    {
-        return view('clients.show', compact('client'));
     }
 
     public function edit(Client $client): View|Factory

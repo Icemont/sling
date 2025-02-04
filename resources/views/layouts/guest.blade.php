@@ -22,7 +22,7 @@
         }
     </style>
 </head>
-<body class="theme-{{ Auth::user()?->dark_theme ? 'dark' : 'light' }}">
+<body{!! Auth::user()?->dark_theme ? ' data-bs-theme="dark"' : '' !!}>
 <div class="font-sans text-gray-900 antialiased">
     {{ $slot }}
 </div>

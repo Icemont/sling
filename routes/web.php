@@ -19,7 +19,7 @@ Route::middleware(['auth'])->group(static function () {
 Route::middleware(['auth', 'verified', 'filled'])->group(static function () {
     Route::get('/', DashboardController::class)->name('dashboard');
 
-    Route::resource('clients', ClientController::class)->except(['create']);
+    Route::resource('clients', ClientController::class);
     Route::resource('payment-methods', PaymentMethodController::class);
     Route::resource('invoices', InvoiceController::class)->except(['create']);
 

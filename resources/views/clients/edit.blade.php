@@ -1,27 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex">
-            <h2 class="page-title">
-                {{ __('Clients') }}
-            </h2>
+            <ol class="page-title breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+                <li class="breadcrumb-item"><a href="{{ route('clients.index') }}">{{ __('Clients') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('Edit #:id', ['id' => $client->id]) }}</li>
+            </ol>
         </div>
     </x-slot>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <h4 class="alert-title">{{ __('Client was not updated because there are errors in the form') }}:</h4>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-errors :errors="$errors" title="{{ __('Client was not updated because there are errors in the form') }}" />
     <div class="row row-cards">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">{{ __('Edit client #:client', ['client' => $client->id]) }}</h4>
-                </div>
                 <div class="card-body">
                     <form action="{{ route('clients.update', ['client' => $client->id]) }}" method="post">
                         @csrf
@@ -30,22 +19,19 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Client Name') }}</label>
-                                    <input type="text" name="name" value="{{ $client->name }}" class="form-control"
-                                           required>
+                                    <input type="text" name="name" value="{{ $client->name }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('Company') }}</label>
-                                    <input type="text" name="company" value="{{ $client->company }}"
-                                           class="form-control">
+                                    <input type="text" name="company" value="{{ $client->company }}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('E-mail') }}</label>
-                                    <input type="email" name="email" value="{{ $client->email }}" class="form-control"
-                                           required>
+                                    <input type="email" name="email" value="{{ $client->email }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -77,22 +63,19 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Country') }}</label>
-                                    <input type="text" name="country" value="{{ $client->address?->country }}"
-                                           class="form-control" required>
+                                    <input type="text" name="country" value="{{ $client->address?->country }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('State') }} / {{ __('Region') }}
-                                        / {{ __('Province') }}</label>
+                                    <label class="form-label">{{ __('State') }} / {{ __('Region') }} / {{ __('Province') }}</label>
                                     <input type="text" name="state" value="{{ $client->address?->state }}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('City') }}</label>
-                                    <input type="text" name="city" value="{{ $client->address?->city }}" class="form-control"
-                                           required>
+                                    <input type="text" name="city" value="{{ $client->address?->city }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -104,15 +87,13 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Address Line 1') }}</label>
-                                    <input type="text" name="street1" value="{{ $client->address?->street1 }}"
-                                           class="form-control" required>
+                                    <input type="text" name="street1" value="{{ $client->address?->street1 }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('Address Line 2') }}</label>
-                                    <input type="text" name="street2" value="{{ $client->address?->street2 }}"
-                                           class="form-control">
+                                    <input type="text" name="street2" value="{{ $client->address?->street2 }}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -123,6 +104,16 @@
                             </div>
                         </div>
                         <div class="form-footer text-end">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 7h16" />
+                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                    <path d="M10 12l4 4m0 -4l-4 4" />
+                                </svg>
+                                {{ __('Delete') }}
+                            </button>
                             <button type="submit" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit"
                                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -135,6 +126,32 @@
                                 {{ __('Update Client') }}
                             </button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+                <div class="modal-status bg-danger"></div>
+                <div class="modal-body text-center py-4">
+                    <i class="fa-solid fa-triangle-exclamation text-danger mb-2" style="font-size:xxx-large"></i>
+                    <h3>{{ __('Delete confirmation') }}</h3>
+                    <div class="text-muted">{{ __('Are you sure you want to delete this client along with the invoices?') }}</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-ban"></i>&nbsp;{{ __('Cancel') }}
+                    </button>
+                    <form class="ms-auto" method="post"
+                          action="{{ route('clients.destroy', ['client' => $client->id]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa-solid fa-trash-can"></i>&nbsp;{{ __('Delete') }}
+                        </button>
                     </form>
                 </div>
             </div>

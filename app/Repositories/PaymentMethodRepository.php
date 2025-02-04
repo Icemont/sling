@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Data\PaymentMethodData;
-use App\Http\Requests\PaymentMethodRequest;
 use App\Models\PaymentMethod;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -36,9 +35,9 @@ class PaymentMethodRepository
         ]);
     }
 
-    public function getPaginated(int $perPage = 25): LengthAwarePaginator
+    public function getPaginated(?int $perPage = null): LengthAwarePaginator
     {
         return PaymentMethod::orderByDesc('id')
-            ->paginate(config('app.per_page.payment_methods', $perPage));
+            ->paginate($perPage ?? config('app.per_page.payment_methods'));
     }
 }
