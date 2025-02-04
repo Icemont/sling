@@ -106,7 +106,6 @@
                             {{ __('Edit Client') }}
                         </a>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
