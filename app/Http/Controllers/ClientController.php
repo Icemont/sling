@@ -15,14 +15,10 @@ use Throwable;
 
 class ClientController extends Controller
 {
-    public function __construct(private readonly ClientRepository $clientRepository)
-    {
-    }
-
-    public function index(): View|Factory
+    public function index(ClientRepository $clientRepository): View|Factory
     {
         return view('clients.index', [
-            'clients' => $this->clientRepository->getPaginated(),
+            'clients' => $clientRepository->getPaginated(),
         ]);
     }
 
@@ -39,9 +35,9 @@ class ClientController extends Controller
     /**
      * @throws Throwable
      */
-    public function store(ClientStoreRequest $request): RedirectResponse
+    public function store(ClientStoreRequest $request, ClientRepository $clientRepository): RedirectResponse
     {
-        $client = $this->clientRepository->createWithAddress($request->getClientData());
+        $client = $clientRepository->createWithAddress($request->getClientData());
 
         return redirect()
             ->route('clients.index')
@@ -60,11 +56,14 @@ class ClientController extends Controller
      * @throws Throwable
      * @throws AuthorizationException
      */
-    public function update(ClientStoreRequest $request, Client $client): RedirectResponse
-    {
+    public function update(
+        ClientStoreRequest $request,
+        ClientRepository $clientRepository,
+        Client $client
+    ): RedirectResponse {
         $this->authorize('owner', $client);
 
-        $this->clientRepository->updateWithAddress($client, $request->getClientData());
+        $clientRepository->updateWithAddress($client, $request->getClientData());
 
         return redirect()
             ->route('clients.index')
@@ -77,11 +76,11 @@ class ClientController extends Controller
     /**
      * @throws AuthorizationException|Throwable
      */
-    public function destroy(Client $client): RedirectResponse
+    public function destroy(ClientRepository $clientRepository, Client $client): RedirectResponse
     {
         $this->authorize('owner', $client);
 
-        $this->clientRepository->deleteWithAddress($client);
+        $clientRepository->deleteWithAddress($client);
 
         return redirect()->route('clients.index')->with([
             'status' => __('Client ":client" deleted!', ['client' => $client->name]),
