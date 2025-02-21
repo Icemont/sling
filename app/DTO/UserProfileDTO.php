@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\DTOs;
+namespace App\DTO;
 
-readonly class UserProfileData
+readonly class UserProfileDTO
 {
     public function __construct(
         public string $name,

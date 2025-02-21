@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\DTOs\AddressDTO;
-use App\DTOs\ClientDTO;
+use App\DTO\AddressDTO;
+use App\DTO\ClientDTO;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\DTOs\AddressDTO;
-use App\DTOs\ClientDTO;
+use App\DTO\AddressDTO;
+use App\DTO\ClientDTO;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

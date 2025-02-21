@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\DataTransferObjects\ReportParametersData;
+use App\DTO\ReportParametersDTO;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,9 +24,9 @@ class ReportRequest extends FormRequest
         ];
     }
 
-    public function getValidatedPayload(): ReportParametersData
+    public function getValidatedPayload(): ReportParametersDTO
     {
-        return new ReportParametersData(
+        return new ReportParametersDTO(
             boolval($this->download ?? false),
             CarbonImmutable::createFromFormat('Y-m-d', $this->from_date)->startOfDay(),
             CarbonImmutable::createFromFormat('Y-m-d', $this->to_date)->endOfDay()

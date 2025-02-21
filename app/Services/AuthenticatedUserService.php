@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\DTOs\AddressDTO;
-use App\DTOs\UserProfileData;
+use App\DTO\AddressDTO;
+use App\DTO\UserProfileDTO;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ readonly class AuthenticatedUserService
     {
     }
 
-    public function updateProfileWithAddress(UserProfileData $profileData): User
+    public function updateProfileWithAddress(UserProfileDTO $profileData): User
     {
         $this->updateProfile($profileData);
         $this->updateAddress($profileData->address);
@@ -24,7 +24,7 @@ readonly class AuthenticatedUserService
         return $this->user;
     }
 
-    public function updateProfile(UserProfileData $profileData): bool
+    public function updateProfile(UserProfileDTO $profileData): bool
     {
         return $this->user->update([
             'name' => $profileData->name,

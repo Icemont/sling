@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\DTOs\AddressDTO;
-use App\DTOs\UserProfileData;
+use App\DTO\AddressDTO;
+use App\DTO\UserProfileDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserSettingsRequest extends FormRequest
@@ -32,7 +32,7 @@ class UserSettingsRequest extends FormRequest
         ];
     }
 
-    public function getProfileData(): UserProfileData
+    public function getProfileData(): UserProfileDTO
     {
         $profile = $this->validated();
 
@@ -45,7 +45,7 @@ class UserSettingsRequest extends FormRequest
             $profile['street2'] ?? null
         );
 
-        return new UserProfileData(
+        return new UserProfileDTO(
             $profile['name'],
             $profile['business'],
             $profile['phone'],
