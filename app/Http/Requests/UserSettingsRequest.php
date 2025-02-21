@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Data\AddressData;
-use App\Data\UserProfileData;
+use App\DTOs\AddressDTO;
+use App\DTOs\UserProfileData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserSettingsRequest extends FormRequest
@@ -36,7 +36,7 @@ class UserSettingsRequest extends FormRequest
     {
         $profile = $this->validated();
 
-        $address = new AddressData(
+        $address = new AddressDTO(
             $profile['country'],
             $profile['state'] ?? null,
             $profile['city'],

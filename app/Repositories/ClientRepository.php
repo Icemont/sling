@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Data\AddressData;
-use App\Data\ClientData;
+use App\DTOs\AddressDTO;
+use App\DTOs\ClientDTO;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -26,7 +26,7 @@ class ClientRepository
         return Client::all(['id', 'name']);
     }
 
-    public function create(ClientData $data): Client
+    public function create(ClientDTO $data): Client
     {
         return Auth::user()->clients()->create([
             'name' => $data->name,
@@ -42,7 +42,7 @@ class ClientRepository
     /**
      * @throws Throwable
      */
-    public function createWithAddress(ClientData $data): Client
+    public function createWithAddress(ClientDTO $data): Client
     {
         return DB::transaction(function () use ($data) {
             $client = $this->create($data);
@@ -52,7 +52,7 @@ class ClientRepository
         });
     }
 
-    public function update(Client $client, ClientData $data): bool
+    public function update(Client $client, ClientDTO $data): bool
     {
         return $client->update([
             'name' => $data->name,
@@ -68,7 +68,7 @@ class ClientRepository
     /**
      * @throws Throwable
      */
-    public function updateWithAddress(Client $client, ClientData $data): Client
+    public function updateWithAddress(Client $client, ClientDTO $data): Client
     {
         return DB::transaction(function () use ($client, $data) {
             $this->update($client, $data);
@@ -78,7 +78,7 @@ class ClientRepository
         });
     }
 
-    public function upsertAddress(Client $client, AddressData $data): Client
+    public function upsertAddress(Client $client, AddressDTO $data): Client
     {
         $client->upsertAddress([
             'country' => $data->country,

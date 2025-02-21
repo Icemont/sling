@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\DTOs;
 
-readonly class ClientData
+readonly class ClientDTO
 {
     public function __construct(
         public string $name,
@@ -13,7 +13,7 @@ readonly class ClientData
         public string $invoice_prefix,
         public int $invoice_index,
         public ?string $phone,
-        public ?AddressData $address,
+        public ?AddressDTO $address,
         public ?string $note
     ) {
     }

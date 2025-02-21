@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\DTOs;
 
 readonly class UserProfileData
 {
@@ -10,7 +10,7 @@ readonly class UserProfileData
         public string $name,
         public array $business,
         public string $phone,
-        public ?AddressData $address,
+        public ?AddressDTO $address,
     ) {
     }
 }

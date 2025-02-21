@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Data\AddressData;
-use App\Data\ClientData;
+use App\DTOs\AddressDTO;
+use App\DTOs\ClientDTO;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -54,11 +54,11 @@ class ClientStoreRequest extends FormRequest
         ];
     }
 
-    public function getClientData(): ClientData
+    public function getClientData(): ClientDTO
     {
         $validated = $this->validated();
 
-        $address = new AddressData(
+        $address = new AddressDTO(
             $validated['country'],
             $validated['state'] ?? null,
             $validated['city'],
@@ -67,7 +67,7 @@ class ClientStoreRequest extends FormRequest
             $validated['street2'] ?? null
         );
 
-        return new ClientData(
+        return new ClientDTO(
             $validated['name'],
             $validated['email'],
             $validated['company'] ?? null,

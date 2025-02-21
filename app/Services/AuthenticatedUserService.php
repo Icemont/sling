@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Data\AddressData;
-use App\Data\UserProfileData;
+use App\DTOs\AddressDTO;
+use App\DTOs\UserProfileData;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ readonly class AuthenticatedUserService
         ]);
     }
 
-    public function updateAddress(AddressData $addressData): Model
+    public function updateAddress(AddressDTO $addressData): Model
     {
         return $this->user->upsertAddress([
             'street1' => $addressData->street1,

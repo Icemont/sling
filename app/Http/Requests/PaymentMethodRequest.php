@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Data\PaymentMethodData;
+use App\DTOs\PaymentMethodDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PaymentMethodRequest extends FormRequest
@@ -27,11 +27,11 @@ class PaymentMethodRequest extends FormRequest
         ];
     }
 
-    public function getPaymentMethodData($forCreating = false): PaymentMethodData
+    public function getPaymentMethodData($forCreating = false): PaymentMethodDTO
     {
         $attributes = $this->input('method_attributes');
 
-        return new PaymentMethodData(
+        return new PaymentMethodDTO(
             $this->input('name'),
             is_array($attributes) ? array_combine($attributes['keys'], $attributes['values']) : [],
             (bool) $this->input('is_active'),

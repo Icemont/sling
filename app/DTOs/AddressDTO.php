@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\DTOs;
 
-readonly class AddressData
+readonly class AddressDTO
 {
     public function __construct(
         public string $country,
