@@ -32,11 +32,11 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
 
         $this->user->address()->delete();
 
-        $request->setUserResolver(fn() => $this->user);
+        $request->setUserResolver(fn () => $this->user);
 
         $middleware = new EnsureProfileIsFilled;
 
-        $response = $middleware->handle($request, fn() => null);
+        $response = $middleware->handle($request, fn () => null);
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals(true, $response->isRedirect(route('user.settings.edit')));
@@ -58,11 +58,11 @@ class EnsureProfileIsFilledMiddlewareTest extends TestCase
             'zip' => 'Test',
         ]);
 
-        $request->setUserResolver(fn() => $this->user);
+        $request->setUserResolver(fn () => $this->user);
 
         $middleware = new EnsureProfileIsFilled;
 
-        $response = $middleware->handle($request, fn() => null);
+        $response = $middleware->handle($request, fn () => null);
 
         $this->assertEquals(null, $response);
     }

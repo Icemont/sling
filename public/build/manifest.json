@@ -1,26 +1,26 @@
 {
-  "resources/js/app.js": {
-    "file": "assets/app.cf27e21e.js",
-    "src": "resources/js/app.js",
-    "isEntry": true,
-    "imports": [
-      "__commonjsHelpers.b8add541.js"
-    ]
-  },
-  "resources/js/tabler.js": {
-    "file": "assets/tabler.af93fa40.js",
-    "src": "resources/js/tabler.js",
-    "isEntry": true,
-    "imports": [
-      "__commonjsHelpers.b8add541.js"
-    ]
-  },
-  "__commonjsHelpers.b8add541.js": {
-    "file": "assets/_commonjsHelpers.b8add541.js"
+  "__commonjsHelpers-725317a4.js": {
+    "file": "assets/_commonjsHelpers-725317a4.js"
   },
   "resources/css/app.css": {
-    "file": "assets/app.917c275e.css",
-    "src": "resources/css/app.css",
-    "isEntry": true
+    "file": "assets/app-1849764c.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-37af27dd.js",
+    "imports": [
+      "__commonjsHelpers-725317a4.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/tabler.js": {
+    "file": "assets/tabler-44039840.js",
+    "imports": [
+      "__commonjsHelpers-725317a4.js"
+    ],
+    "isEntry": true,
+    "src": "resources/js/tabler.js"
   }
 }

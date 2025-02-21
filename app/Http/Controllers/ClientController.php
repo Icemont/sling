@@ -15,35 +15,36 @@ use Throwable;
 
 class ClientController extends Controller
 {
-    public function __construct(private readonly ClientRepository $clientRepository)
-    {
-    }
-
-    public function index(): View|Factory
+    public function index(ClientRepository $clientRepository): View|Factory
     {
         return view('clients.index', [
-            'clients' => $this->clientRepository->getPaginated(),
+            'clients' => $clientRepository->getPaginated(),
         ]);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function store(ClientStoreRequest $request): RedirectResponse
-    {
-        $client = $this->clientRepository->createWithAddress($request);
-
-        return redirect()
-            ->route('clients.index')
-            ->with([
-                'status' => __('New client ":client" successfully added!', ['client' => $client->name]),
-                'type' => 'success'
-            ]);
     }
 
     public function show(Client $client): View|Factory
     {
         return view('clients.show', compact('client'));
+    }
+
+    public function create(): View|Factory
+    {
+        return view('clients.create');
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function store(ClientStoreRequest $request, ClientRepository $clientRepository): RedirectResponse
+    {
+        $client = $clientRepository->createWithAddress($request->getClientData());
+
+        return redirect()
+            ->route('clients.index')
+            ->with([
+                'status' => __('New client ":client" successfully added!', ['client' => $client->name]),
+                'type' => 'success',
+            ]);
     }
 
     public function edit(Client $client): View|Factory
@@ -55,32 +56,35 @@ class ClientController extends Controller
      * @throws Throwable
      * @throws AuthorizationException
      */
-    public function update(ClientStoreRequest $request, Client $client): RedirectResponse
-    {
+    public function update(
+        ClientStoreRequest $request,
+        ClientRepository $clientRepository,
+        Client $client
+    ): RedirectResponse {
         $this->authorize('owner', $client);
 
-        $this->clientRepository->updateWithAddress($client, $request);
+        $clientRepository->updateWithAddress($client, $request->getClientData());
 
         return redirect()
             ->route('clients.index')
             ->with([
                 'status' => __('Client ":client" successfully updated!', ['client' => $client->name]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
     /**
-     * @throws AuthorizationException
+     * @throws AuthorizationException|Throwable
      */
-    public function destroy(Client $client): RedirectResponse
+    public function destroy(ClientRepository $clientRepository, Client $client): RedirectResponse
     {
         $this->authorize('owner', $client);
 
-        $this->clientRepository->deleteWithAddress($client);
+        $clientRepository->deleteWithAddress($client);
 
         return redirect()->route('clients.index')->with([
             'status' => __('Client ":client" deleted!', ['client' => $client->name]),
-            'type' => 'info'
+            'type' => 'info',
         ]);
     }
 }

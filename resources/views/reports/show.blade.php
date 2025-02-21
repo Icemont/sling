@@ -55,7 +55,7 @@
                                             </td>
                                             <td>
                                                 <div class="float-end">
-                                                    {{ $invoice->amount }} {{ $user->currency->code }}
+                                                    {{ $invoice->amount }} {{ $user->currency->code() }}
                                                 </div>
                                             </td>
                                         </tr>
@@ -63,7 +63,7 @@
                                             <tr class="border-top">
                                                 <td colspan="2">
                                                     <div class="float-end">
-                                                        <strong>{{ $invoices->sum('amount') }} {{ $user->currency->code }}</strong>
+                                                        <strong>{{ $invoices->sum('amount') }} {{ $user->currency->code() }}</strong>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -76,7 +76,7 @@
                                             <th>{{ __('Total') }}</th>
                                             <td>
                                                 <div class="float-end">
-                                                    <strong>{{ number_format($total, 2) }} {{ $user->currency->code }}</strong>
+                                                    <strong>{{ number_format($total, 2) }} {{ $user->currency->code() }}</strong>
                                                 </div>
                                             </td>
                                         </tr>

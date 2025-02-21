@@ -20,7 +20,7 @@ class ReportController extends Controller
 
     public function create(ReportRequest $request, InvoiceRepository $invoiceRepository): View|Factory|Response
     {
-        $reportParameters = $request->getPayload();
+        $reportParameters = $request->getValidatedPayload();
         $invoices = $invoiceRepository->getForReportByDates($reportParameters->dateFrom, $reportParameters->dateTo);
 
         $reportData = [
@@ -32,6 +32,7 @@ class ReportController extends Controller
 
         if ($reportParameters->download) {
             $pdf = Pdf::loadView('reports.sales-report', $reportData);
+
             return $pdf->download('report-' . now()->format('d-m-Y') . '.pdf');
         }
 

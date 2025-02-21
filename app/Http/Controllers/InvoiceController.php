@@ -47,7 +47,6 @@ class InvoiceController extends Controller
         return view('invoices.create', [
             'client' => $client,
             'user' => auth()->user(),
-            'currencies' => Currency::all(),
             'payment_methods' => $paymentMethodRepository->getActiveForSelector(),
         ]);
     }
@@ -57,13 +56,13 @@ class InvoiceController extends Controller
      */
     public function store(InvoiceStoreRequest $request): RedirectResponse
     {
-        $invoice = $this->invoiceRepository->create($request);
+        $invoice = $this->invoiceRepository->create($request->getInvoicePayload());
 
         return redirect()
             ->route('invoices.index')
             ->with([
                 'status' => __('New invoice ":invoice" successfully added!', ['invoice' => $invoice->invoice_number]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -88,7 +87,6 @@ class InvoiceController extends Controller
         return view('invoices.edit', [
             'invoice' => $invoice,
             'user' => auth()->user(),
-            'currencies' => Currency::all(),
             'payment_methods' => $paymentMethodRepository->getActiveForSelector(),
         ]);
     }
@@ -100,13 +98,13 @@ class InvoiceController extends Controller
     {
         $this->authorize('owner', $invoice);
 
-        $this->invoiceRepository->update($invoice, $request);
+        $this->invoiceRepository->update($invoice, $request->getInvoicePayload());
 
         return redirect()
             ->route('invoices.index')
             ->with([
                 'status' => __('Invoice ":invoice" successfully updated!', ['invoice' => $invoice->invoice_number]),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 
@@ -121,7 +119,7 @@ class InvoiceController extends Controller
 
         return redirect()->route('invoices.index')->with([
             'status' => __('Invoice ":invoice" deleted!', ['invoice' => $invoice->invoice_number]),
-            'type' => 'info'
+            'type' => 'info',
         ]);
     }
 }

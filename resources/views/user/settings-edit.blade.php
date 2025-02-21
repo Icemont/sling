@@ -1,24 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex">
-            <h2 class="page-title">
-                {{ __('Profile settings') }}
-            </h2>
+            <ol class="page-title breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+                <li class="breadcrumb-item"><a href="{{ route('user.settings.show') }}">{{ __('Profile settings') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('Edit') }}</li>
+            </ol>
         </div>
     </x-slot>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <h4 class="alert-title">{{ __('Profile settings was not updated because there are errors in the form') }}:</h4>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    @if (session('status'))
-        <x-alert :type="session('type')" :message="session('status')" class="mb-2"/>
-    @endif
+    <x-errors :errors="$errors" title="{{ __('Profile settings was not updated because there are errors in the form') }}" />
     <div class="row row-cards">
         <div class="col-12">
             <div class="card">

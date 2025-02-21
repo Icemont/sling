@@ -18,7 +18,7 @@ class EnsureProfileIsFilled
                 !$request->user()->address()->exists())) {
             return Redirect::route('user.settings.edit')->with([
                 'status' => __('You must update your user profile first.'),
-                'type' => 'warning'
+                'type' => 'warning',
             ]);
         }
 

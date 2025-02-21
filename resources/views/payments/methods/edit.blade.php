@@ -1,28 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex">
-            <h2 class="page-title">
-                {{ __('Payment methods') }}
-            </h2>
+            <ol class="page-title breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+                <li class="breadcrumb-item"><a href="{{ route('payment-methods.index') }}">{{ __('Payment methods') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('Edit #:id', ['id' => $paymentMethod->id]) }}</li>
+            </ol>
         </div>
     </x-slot>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <h4 class="alert-title">{{ __('Payment method was not updated because there are errors in the form') }}
-                :</h4>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-errors :errors="$errors" title="{{ __('Payment method was not updated because there are errors in the form') }}" />
     <div class="row row-cards">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">{{ __('Edit payment method #:id', ['id' => $paymentMethod->id]) }}</h4>
-                </div>
                 <div class="card-body">
                     <form action="{{ route('payment-methods.update', ['payment_method' => $paymentMethod->id]) }}"
                           method="post">
@@ -68,6 +56,16 @@
                             </div>
                         </div>
                         <div class="form-footer text-end mt-0">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 7h16" />
+                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                    <path d="M10 12l4 4m0 -4l-4 4" />
+                                </svg>
+                                {{ __('Delete') }}
+                            </button>
                             <button type="submit" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit"
                                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -80,6 +78,32 @@
                                 {{ __('Update Payment Method') }}
                             </button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+                <div class="modal-status bg-danger"></div>
+                <div class="modal-body text-center py-4">
+                    <i class="fa-solid fa-triangle-exclamation text-danger mb-2" style="font-size:xxx-large"></i>
+                    <h3>{{ __('Delete confirmation') }}</h3>
+                    <div class="text-muted">{{ __('Are you sure you want to delete this payment method?') }}</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-ban"></i>&nbsp;{{ __('Cancel') }}
+                    </button>
+                    <form class="ms-auto" method="post"
+                          action="{{ route('payment-methods.destroy', ['payment_method' => $paymentMethod->id]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa-solid fa-trash-can"></i>&nbsp;{{ __('Delete') }}
+                        </button>
                     </form>
                 </div>
             </div>

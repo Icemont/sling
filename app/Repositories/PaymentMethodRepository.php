@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Http\Requests\PaymentMethodRequest;
+use App\DTO\PaymentMethodDTO;
 use App\Models\PaymentMethod;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,21 +16,28 @@ class PaymentMethodRepository
         return PaymentMethod::active()->get(['id', 'name']);
     }
 
-    public function create(PaymentMethodRequest $request): PaymentMethod
+    public function create(PaymentMethodDTO $paymentMethodData): PaymentMethod
     {
-        return PaymentMethod::create(
-            $request->getPaymentMethodPayload(true)
-        );
+        return PaymentMethod::create([
+            'name' => $paymentMethodData->name,
+            'attributes' => $paymentMethodData->attributes,
+            'is_active' => $paymentMethodData->isActive,
+            'user_id' => $paymentMethodData->userId,
+        ]);
     }
 
-    public function updatePaymentMethod(PaymentMethod $paymentMethod, PaymentMethodRequest $request): bool
+    public function updatePaymentMethod(PaymentMethod $paymentMethod, PaymentMethodDTO $paymentMethodData): bool
     {
-        return $paymentMethod->update($request->getPaymentMethodPayload());
+        return $paymentMethod->update([
+            'name' => $paymentMethodData->name,
+            'attributes' => $paymentMethodData->attributes,
+            'is_active' => $paymentMethodData->isActive,
+        ]);
     }
 
-    public function getPaginated(int $perPage = 25): LengthAwarePaginator
+    public function getPaginated(?int $perPage = null): LengthAwarePaginator
     {
         return PaymentMethod::orderByDesc('id')
-            ->paginate(config('app.per_page.payment_methods', $perPage));
+            ->paginate($perPage ?? config('app.per_page.payment_methods'));
     }
 }

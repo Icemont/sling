@@ -1,1 +1,1 @@
-<h1 {{ $attributes }}><a href="{{ route('dashboard') }}">{{ config('app.name', 'Sling') }}</a></h1>
+<a {{ $attributes }} href="{{ route('dashboard') }}"><img src="/assets/images/logo.svg" class="navbar-brand-image" style="height:42px;" alt="{{ config('app.name', 'Sling') }}" /></a>

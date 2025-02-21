@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\DTO\AddressDTO;
+use App\DTO\ClientDTO;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Unique;
 
 class ClientStoreRequest extends FormRequest
 {
@@ -17,13 +21,12 @@ class ClientStoreRequest extends FormRequest
     public function rules(): array
     {
         $uniqueClientRule = Rule::unique('clients')
-            ->where(function ($query) {
+            ->where(function (Builder $query) {
                 return $query->where('user_id', $this->user()->id);
+            })
+            ->when($this->routeIs('clients.update'), function (Unique $rule) {
+                return $rule->ignore($this->route('client')->id);
             });
-
-        if ($this->routeIs('clients.update')) {
-            $uniqueClientRule->ignore($this->route('client')->id);
-        }
 
         return [
             'name' => 'required|string|max:150',
@@ -51,36 +54,29 @@ class ClientStoreRequest extends FormRequest
         ];
     }
 
-    public function getClientAddressPayload(): array
+    public function getClientData(): ClientDTO
     {
-        return collect($this->validated())
-            ->only([
-                'street1',
-                'street2',
-                'city',
-                'state',
-                'country',
-                'zip',
-            ])
-            ->toArray();
-    }
+        $validated = $this->validated();
 
-    public function getClientPayload($forCreating = false): array
-    {
-        return collect($this->validated())
-            ->only([
-                'name',
-                'email',
-                'company',
-                'phone',
-                'invoice_prefix',
-                'invoice_index',
-                'note',
-            ])
-            ->when($forCreating, function ($payload) {
-                return $payload->merge(['user_id' => $this->user()->id]);
-            })
-            ->toArray();
+        $address = new AddressDTO(
+            $validated['country'],
+            $validated['state'] ?? null,
+            $validated['city'],
+            $validated['zip'] ?? null,
+            $validated['street1'],
+            $validated['street2'] ?? null
+        );
+
+        return new ClientDTO(
+            $validated['name'],
+            $validated['email'],
+            $validated['company'] ?? null,
+            $validated['invoice_prefix'],
+            (int) $validated['invoice_index'],
+            $validated['phone'] ?? null,
+            $address,
+            $validated['note'] ?? null
+        );
     }
 
     public function attributes(): array

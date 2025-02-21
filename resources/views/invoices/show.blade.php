@@ -34,8 +34,8 @@
                                     </div>
                                     <div class="col-5">
                                         <select id="currency" class="form-select" name="currency_id" disabled>
-                                            <option selected="selected">{{ $invoice->currency->symbol }}
-                                                ({{ $invoice->currency->code }})
+                                            <option selected="selected">{{ $invoice->currency->symbol() }}
+                                                ({{ $invoice->currency->code() }})
                                             </option>
                                         </select>
                                     </div>

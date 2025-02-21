@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use Carbon\Carbon;
+use App\DTO\InvoiceDTO;
+use App\Enums\Currency;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class InvoiceStoreRequest extends FormRequest
 {
@@ -32,14 +35,18 @@ class InvoiceStoreRequest extends FormRequest
             ],
             'product_name' => 'required|string|max:150',
             'product_price' => 'required|numeric|max:9999999999.99',
-            'currency_id' => 'required|integer|exists:currencies,id',
+            'currency' => [
+                'required',
+                'integer',
+                new Enum(Currency::class),
+            ],
             'invoice_number' => [
                 'required',
                 'string',
                 'max:25',
                 $isCreating ?
                     Rule::unique('invoices')->where(function ($query) {
-                        return $query->where('client_id', $this->client_id);
+                        return $query->where('client_id', $this->input('client_id'));
                     }) :
                     Rule::unique('invoices')->where(function ($query) {
                         return $query->where('client_id', $this->route('invoice')->client_id);
@@ -57,58 +64,47 @@ class InvoiceStoreRequest extends FormRequest
             ],
             'is_paid' => 'boolean',
             'payment_date' => 'exclude_unless:is_paid,true|required|date_format:"' . self::DATE_FORMAT . '"',
-            'exchange_rate' => $this->user()->currency_id == $this->currency_id ?
-                '' : 'exclude_unless:is_paid,true|required|numeric|max:99999.9999999',
+            'exchange_rate' => $this->user()->currency == Currency::tryFrom((int) $this->input('currency')) ?
+                'nullable' : 'exclude_unless:is_paid,true|required|numeric|gt:0|max:99999.9999999',
             'note' => 'nullable|string',
         ];
     }
 
-    public function getInvoicePayload($forCreating = false): array
+    public function getInvoicePayload(): InvoiceDTO
     {
-        $isPaid = (bool)$this->is_paid;
-        $isLocalCurrency = ($this->user()->currency_id == $this->currency_id);
+        $validated = $this->validated();
 
-        return collect($this->validated())
-            ->only([
-                'product_name',
-                'currency_id',
-                'invoice_number',
-                'payment_method_id',
-                'note',
-            ])
-            ->when($forCreating, function ($payload) {
-                return $payload->merge(['client_id' => $this->client_id]);
-            })
-            ->merge([
-                'product_price' => round(floatval($this->product_price), 2),
-                'invoice_date' => Carbon::createFromFormat(self::DATE_FORMAT, $this->invoice_date),
-                'is_paid' => $isPaid,
-            ])
-            ->when($isPaid, function ($payload) use ($isLocalCurrency) {
-                return $payload
-                    ->merge([
-                        'payment_date' => Carbon::createFromFormat(self::DATE_FORMAT, $this->payment_date),
-                    ])
-                    ->when($isLocalCurrency, function ($payload) {
-                        return $payload->merge([
-                            'amount' => (float)$this->product_price,
-                        ]);
-                    })
-                    ->unless($isLocalCurrency, function ($payload) {
-                        return $payload->merge([
-                            'exchange_rate' => (float)$this->exchange_rate,
-                            'amount' => (float)$this->product_price * (float)$this->exchange_rate,
-                        ]);
-                    });
-            })
-            ->toArray();
+        $clientId = $this->input('client_id') ? (int) $this->input('client_id') : null;
+        $isPaid = (bool) $this->input('is_paid');
+        $currency = Currency::from((int) $validated['currency']);
+        $isLocalCurrency = ($this->user()->currency == $currency);
+        $productPrice = round(floatval($validated['product_price']), 2);
+        $amount = $isPaid ? (
+            $isLocalCurrency ? $productPrice : round($productPrice * floatval($validated['exchange_rate']), 2)
+        ) : null;
+        $exchangeRate = $isPaid ? ($isLocalCurrency ? null : round(floatval($validated['exchange_rate']), 7)) : null;
+
+        return new InvoiceDTO(
+            $clientId,
+            $validated['product_name'],
+            $productPrice,
+            $currency,
+            $exchangeRate,
+            $amount,
+            $validated['invoice_number'],
+            CarbonImmutable::createFromFormat(self::DATE_FORMAT, $validated['invoice_date']),
+            (int) $validated['payment_method_id'],
+            $isPaid,
+            $isPaid ? CarbonImmutable::createFromFormat(self::DATE_FORMAT, $validated['payment_date']) : null,
+            $validated['note'],
+        );
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
-            'product_price' => Str::replace(',', '.', $this->product_price),
-            'exchange_rate' => Str::replace(',', '.', $this->exchange_rate),
+            'product_price' => Str::replace(',', '.', $this->input('product_price')),
+            'exchange_rate' => Str::replace(',', '.', $this->input('exchange_rate')),
         ]);
     }
 }

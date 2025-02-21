@@ -1,60 +1,51 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex">
-            <h2 class="page-title">
-                {{ __('Clients') }}
-            </h2>
+            <ol class="page-title breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+                <li class="breadcrumb-item"><a href="{{ route('clients.index') }}">{{ __('Clients') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('Show #:id', ['id' => $client->id]) }}</li>
+            </ol>
         </div>
     </x-slot>
-
     <div class="row row-cards">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">{{ __('Client #:client information', ['client' => $client->id]) }}</h4>
-                </div>
                 <div class="card-body">
                     <div class="row border-bottom pb-2">
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Client Name') }}</label>
-                                <input type="text" name="name" value="{{ $client->name }}" class="form-control"
-                                       readonly>
+                                <input type="text" name="name" value="{{ $client->name }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Company') }}</label>
-                                <input type="text" name="company" value="{{ $client->company }}" class="form-control"
-                                       readonly>
+                                <input type="text" name="company" value="{{ $client->company }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('E-mail') }}</label>
-                                <input type="email" name="email" value="{{ $client->email }}" class="form-control"
-                                       readonly>
+                                <input type="email" name="email" value="{{ $client->email }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Phone Number') }}</label>
-                                <input type="text" name="phone" value="{{ $client->phone }}" class="form-control"
-                                       readonly>
+                                <input type="text" name="phone" value="{{ $client->phone }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Invoice Number Prefix') }}</label>
-                                <input type="text" name="invoice_prefix" value="{{ $client->invoice_prefix }}"
-                                       class="form-control" readonly>
+                                <input type="text" name="invoice_prefix" value="{{ $client->invoice_prefix }}" class="form-control text-end" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label required">{{ __('Invoice Number Index') }}</label>
-                                <input type="text" name="invoice_index" value="{{ $client->invoice_index }}"
-                                       class="form-control" readonly>
+                                <input type="text" name="invoice_index" value="{{ $client->invoice_index }}" class="form-control" disabled>
                             </div>
                         </div>
                     </div>
@@ -62,50 +53,43 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Country') }}</label>
-                                <input type="text" name="country" value="{{ $client->address?->country }}"
-                                       class="form-control" readonly>
+                                <input type="text" name="country" value="{{ $client->address?->country }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label class="form-label">{{ __('State') }} / {{ __('Region') }}
-                                    / {{ __('Province') }}</label>
-                                <input type="text" name="state" value="{{ $client->address?->state }}" class="form-control"
-                                       readonly>
+                                <label class="form-label">{{ __('State') }} / {{ __('Region') }} / {{ __('Province') }}</label>
+                                <input type="text" name="state" value="{{ $client->address?->state }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('City') }}</label>
-                                <input type="text" name="city" value="{{ $client->address?->city }}" class="form-control"
-                                       readonly>
+                                <input type="text" name="city" value="{{ $client->address?->city }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('ZIP') }} / {{ __('Postal Code') }}</label>
-                                <input type="text" name="zip" value="{{ $client->address?->zip }}" class="form-control" readonly>
+                                <input type="text" name="zip" value="{{ $client->address?->zip }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Address Line 1') }}</label>
-                                <input type="text" name="street1" value="{{ $client->address?->street1 }}"
-                                       class="form-control" readonly>
+                                <input type="text" name="street1" value="{{ $client->address?->street1 }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Address Line 2') }}</label>
-                                <input type="text" name="street2" value="{{ $client->address?->street2 }}"
-                                       class="form-control" readonly>
+                                <input type="text" name="street2" value="{{ $client->address?->street2 }}" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div>
                                 <label class="form-label">{{ __('Note') }}</label>
-                                <textarea name="note" class="form-control" rows="3"
-                                          readonly>{{ $client->note }}</textarea>
+                                <textarea name="note" class="form-control" rows="3" disabled>{{ $client->note }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -122,7 +106,6 @@
                             {{ __('Edit Client') }}
                         </a>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>

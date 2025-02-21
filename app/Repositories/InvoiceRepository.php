@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Http\Requests\InvoiceStoreRequest;
+use App\DTO\InvoiceDTO;
 use App\Models\Invoice;
 use App\Models\User;
 use Carbon\Carbon;
@@ -16,32 +16,58 @@ use Throwable;
 
 class InvoiceRepository
 {
-    public function getPaginatedWithRelations(int $perPage = 25): LengthAwarePaginator
+    public function getPaginatedWithRelations(?int $perPage = null): LengthAwarePaginator
     {
-        return Invoice::with(['client', 'currency'])
+        return Invoice::with(['client'])
             ->orderByDesc('id')
-            ->paginate(config('app.per_page.invoices', $perPage));
+            ->paginate($perPage ?? config('app.per_page.invoices'));
     }
 
     /**
      * @throws Throwable
      */
-    public function create(InvoiceStoreRequest $request)
+    public function create(InvoiceDTO $data)
     {
-        return DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($data) {
             /** @var User $user */
             $user = auth()->user();
 
-            $invoice = $user->invoices()->create($request->getInvoicePayload(true));
+            $invoice = $user->invoices()->create([
+                'client_id' => $data->clientId,
+                'product_name' => $data->productName,
+                'currency' => $data->currency,
+                'invoice_number' => $data->invoiceNumber,
+                'payment_method_id' => $data->paymentMethodId,
+                'product_price' => $data->productPrice,
+                'invoice_date' => $data->invoiceDate,
+                'is_paid' => $data->isPaid,
+                'payment_date' => $data->paymentDate,
+                'exchange_rate' => $data->exchangeRate,
+                'amount' => $data->amount,
+                'note' => $data->note,
+            ]);
+
             $invoice->client()->increment('invoice_index');
 
             return $invoice;
         });
     }
 
-    public function update(Invoice $invoice, InvoiceStoreRequest $request): bool
+    public function update(Invoice $invoice, InvoiceDTO $data): bool
     {
-        return $invoice->update($request->getInvoicePayload());
+        return $invoice->update([
+            'product_name' => $data->productName,
+            'currency' => $data->currency,
+            'invoice_number' => $data->invoiceNumber,
+            'payment_method_id' => $data->paymentMethodId,
+            'product_price' => $data->productPrice,
+            'invoice_date' => $data->invoiceDate,
+            'is_paid' => $data->isPaid,
+            'payment_date' => $data->paymentDate,
+            'exchange_rate' => $data->exchangeRate,
+            'amount' => $data->amount,
+            'note' => $data->note,
+        ]);
     }
 
     public function getForReportByDates(CarbonImmutable $dateFrom, CarbonImmutable $dateTo): Collection
@@ -53,12 +79,10 @@ class InvoiceRepository
             'invoices.product_price',
             'invoices.client_id',
             'invoices.exchange_rate',
-            'invoices.currency_id',
-            'currencies.code as currency',
+            'invoices.currency',
             'clients.name as client_name',
         ])
             ->leftJoin('clients', 'invoices.client_id', '=', 'clients.id')
-            ->leftJoin('currencies', 'invoices.currency_id', '=', 'currencies.id')
             ->where('invoices.is_paid', true)
             ->whereDate('invoices.payment_date', '>=', $dateFrom)
             ->whereDate('invoices.payment_date', '<=', $dateTo)
@@ -70,7 +94,7 @@ class InvoiceRepository
     {
         return Invoice::select([
             DB::raw('count(*) as invoices_count'),
-            'is_paid'
+            'is_paid',
         ])
             ->groupBy('is_paid')
             ->get();

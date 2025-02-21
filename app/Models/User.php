@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\BusinessCast;
+use App\Enums\Currency;
 use App\Traits\HasAddress;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -29,7 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'phone',
         'business',
-        'currency_id',
+        'currency',
         'dark_theme',
     ];
 
@@ -52,8 +52,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'business' => BusinessCast::class,
         'dark_theme' => 'boolean',
+        'currency' => Currency::class,
     ];
-
 
     public function clients(): HasMany
     {
@@ -63,11 +63,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function paymentMethods(): HasMany
     {
         return $this->hasMany(PaymentMethod::class);
-    }
-
-    public function currency(): BelongsTo
-    {
-        return $this->belongsTo(Currency::class);
     }
 
     public function invoices(): HasMany
@@ -80,8 +75,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->business->name;
     }
 
-    public function getCurrencyCode(): string
+    public function getCurrency(): Currency
     {
-        return $this->currency ? $this->currency->code : config('app.default_currency');
+        return $this->currency ?? config('app.default_currency');
     }
 }

@@ -43,7 +43,7 @@ class StatisticService
                     'month' => $this->invoiceRepository->getPaidAmountCurrentMonth(),
                 ],
                 'clients' => Client::count(),
-                'currency_code' => $this->user->getCurrencyCode(),
+                'currency_code' => $this->user->getCurrency()->code(),
             ];
         });
     }

@@ -28,7 +28,7 @@ class UpdatePasswordController extends Controller
             ->route('user.password.edit')
             ->with([
                 'status' => __('Password successfully updated!'),
-                'type' => 'success'
+                'type' => 'success',
             ]);
     }
 }

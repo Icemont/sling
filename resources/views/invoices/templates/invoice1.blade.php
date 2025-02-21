@@ -167,7 +167,7 @@
             </td>
 
             <td>
-                {{ number_format($invoice->product_price, 2) }} {{ $invoice->currency->code }}
+                {{ number_format($invoice->product_price, 2) }} {{ $invoice->currency->code() }}
             </td>
         </tr>
     </table>
@@ -176,8 +176,8 @@
             <td style="min-width: 30%"></td>
 
             <td>
-                Total: {{ number_format($invoice->product_price, 2) }} {{ $invoice->currency->code }}
-                ({{ number_format($invoice->product_price, 2) }} {{ $invoice->currency->name }})
+                Total: {{ number_format($invoice->product_price, 2) }} {{ $invoice->currency->code() }}
+                ({{ number_format($invoice->product_price, 2) }} {{ $invoice->currency->name() }})
             </td>
         </tr>
     </table>

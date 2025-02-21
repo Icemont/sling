@@ -10,6 +10,6 @@ export default defineConfig({
                 'resources/js/tabler.js',
             ],
             refresh: true,
-        }),
+        })
     ],
 });

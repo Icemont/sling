@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Contracts\HasOwner;
+use App\Enums\Currency;
 use App\Scopes\UserScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 
 class Invoice extends Model implements HasOwner
 {
-    use HasFactory;
-
     protected $fillable = [
         'client_id',
         'product_name',
-        'currency_id',
+        'currency',
         'invoice_number',
         'payment_method_id',
         'note',
@@ -37,6 +35,7 @@ class Invoice extends Model implements HasOwner
         'payment_date' => 'date',
         'amount' => 'float',
         'exchange_rate' => 'float',
+        'currency' => Currency::class,
     ];
 
     protected static function booted()
@@ -62,11 +61,6 @@ class Invoice extends Model implements HasOwner
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
-    }
-
-    public function currency(): BelongsTo
-    {
-        return $this->belongsTo(Currency::class);
     }
 
     public function paymentMethod(): BelongsTo

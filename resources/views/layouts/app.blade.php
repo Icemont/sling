@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Sling') }}</title>
+    <link rel="icon" type="image/png" href="/assets/icons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/icons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Sling" />
+    <link rel="manifest" href="/assets/icons/site.webmanifest" />
     @vite(['resources/css/app.css'])
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,12 +25,11 @@
         }
     </style>
 </head>
-<body class="theme-{{ Auth::user()->dark_theme ? 'dark' : 'light' }}">
+<body{!! Auth::user()?->dark_theme ? ' data-bs-theme="dark"' : '' !!}>
 @include('layouts.navigation')
 <div class="page">
     <div class="page-wrapper">
         <div class="container-xl">
-            <!-- Page title -->
             <div class="page-header d-print-none">
                 <div class="row align-items-center">
                     <div class="col">
@@ -35,6 +40,9 @@
         </div>
         <div class="page-body">
             <div class="container-xl">
+                @if (session('status'))
+                    <x-alert :type="session('type')" :message="session('status')" class="mb-2"/>
+                @endif
                 {{ $slot }}
             </div>
         </div>
@@ -62,6 +70,6 @@
     </div>
 </div>
 @vite(['resources/js/app.js', 'resources/js/tabler.js'])
-
+@stack('body-end')
 </body>
 </html>

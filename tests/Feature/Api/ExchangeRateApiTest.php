@@ -21,8 +21,6 @@ class ExchangeRateApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->seed(CurrenciesSeeder::class);
         $this->user = User::factory()->createOne();
     }
 
@@ -37,14 +35,14 @@ class ExchangeRateApiTest extends TestCase
             route('api.exchange-rates.get',
                 [
                     'currency' => config('app.default_currency'),
-                    'date' => now()->format('Y-m-d')
+                    'date' => now()->format('Y-m-d'),
                 ]
             )
         );
 
         $response->assertStatus(200);
 
-        $response->assertJson(fn(AssertableJson $json) => $json
+        $response->assertJson(fn (AssertableJson $json) => $json
             ->has('rate')
             ->missing('error')
         );

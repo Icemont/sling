@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\DTO\AddressDTO;
+use App\DTO\UserProfileDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserSettingsRequest extends FormRequest
@@ -30,28 +32,24 @@ class UserSettingsRequest extends FormRequest
         ];
     }
 
-    public function getUserProfilePayload(): array
+    public function getProfileData(): UserProfileDTO
     {
-        return collect($this->validated())
-            ->only([
-                'name',
-                'business',
-                'phone',
-            ])
-            ->toArray();
-    }
+        $profile = $this->validated();
 
-    public function getUserAddressPayload(): array
-    {
-        return collect($this->validated())
-            ->only([
-                'street1',
-                'street2',
-                'city',
-                'state',
-                'country',
-                'zip',
-            ])
-            ->toArray();
+        $address = new AddressDTO(
+            $profile['country'],
+            $profile['state'] ?? null,
+            $profile['city'],
+            $profile['zip'] ?? null,
+            $profile['street1'],
+            $profile['street2'] ?? null
+        );
+
+        return new UserProfileDTO(
+            $profile['name'],
+            $profile['business'],
+            $profile['phone'],
+            $address
+        );
     }
 }

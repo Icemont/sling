@@ -7,12 +7,11 @@ namespace App\Models;
 use App\Contracts\HasOwner;
 use App\Scopes\UserScope;
 use App\Traits\HasAddress;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model implements HasOwner
 {
-    use HasFactory, HasAddress;
+    use HasAddress;
 
     protected $fillable = [
         'user_id',
@@ -25,7 +24,7 @@ class Client extends Model implements HasOwner
         'note',
     ];
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::addGlobalScope(new UserScope(auth()->id()));
     }

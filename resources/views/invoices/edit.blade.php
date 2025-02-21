@@ -1,28 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex">
-            <h2 class="page-title">
-                {{ __('Invoices') }}
-            </h2>
+            <ol class="page-title breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+                <li class="breadcrumb-item"><a href="{{ route('invoices.index') }}">{{ __('Invoices') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('Edit invoice ":invoice" for client ":client"', ['invoice' => $invoice->invoice_number, 'client' => $invoice->client->name]) }}</li>
+            </ol>
         </div>
     </x-slot>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <h4 class="alert-title">{{ __('Invoice was not updated because there are errors in the form') }}
-                :</h4>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-errors :errors="$errors" title="{{ __('Invoice was not updated because there are errors in the form') }}" />
     <div class="row row-cards">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">{{ __('Edit invoice ":invoice" for client ":client"', ['invoice' => $invoice->invoice_number, 'client' => $invoice->client->name]) }}</h4>
-                </div>
                 <div class="card-body">
                     <form action="{{ route('invoices.update', ['invoice' => $invoice->id]) }}" method="post">
                         @csrf
@@ -47,11 +35,11 @@
                                                    required>
                                         </div>
                                         <div class="col-5">
-                                            <select id="currency" class="form-select" name="currency_id">
-                                                @foreach($currencies as $currency)
-                                                    <option value="{{ $currency->id }}" data-code="{{ $currency->code }}"{!! $currency->id == $invoice->currency_id
-                                ? ' selected="selected"' : '' !!}>{{ $currency->symbol }} ({{ $currency->code }})
-                                                    </option>
+                                            <select id="currency" class="form-select" name="currency">
+                                                @foreach(\App\Enums\Currency::cases() as $currency)
+                                                    <x-option :value="$currency->value" name="{{ $currency->symbol() }} ({{ $currency->code() }})"
+                                                              data-id="{{ $currency->value }}"
+                                                              :selected="old('currency', $invoice->currency->value)"/>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -79,8 +67,7 @@
                                     <label class="form-label required">{{ __('Payment Method') }}</label>
                                     <select class="form-select" name="payment_method_id">
                                         @foreach($payment_methods as $payment_method)
-                                            <option value="{{ $payment_method->id }}"{!! $payment_method->id == $invoice->payment_method_id
-                                ? ' selected="selected"' : '' !!}>{{ $payment_method->name }}</option>
+                                            <x-option :value="$payment_method->id" :name="$payment_method->name" :selected="old('payment_method_id', $invoice->payment_method_id)"/>
                                         @endforeach
                                     </select>
                                 </div>
@@ -148,5 +135,5 @@
             </div>
         </div>
     </div>
-    @include('invoices.partials.form-js', ['currency_id' => $user->currency_id])
+    @include('invoices.partials.form-js', ['currency_id' => $user->currency->value])
 </x-app-layout>

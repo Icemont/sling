@@ -6,14 +6,11 @@ namespace App\Models;
 
 use App\Contracts\HasOwner;
 use App\Scopes\UserScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PaymentMethod extends Model implements HasOwner
 {
-    use HasFactory;
-
     protected $casts = [
         'attributes' => 'array',
         'is_active' => 'boolean',
@@ -26,7 +23,7 @@ class PaymentMethod extends Model implements HasOwner
         'is_active',
     ];
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::addGlobalScope(new UserScope(auth()->id()));
     }
