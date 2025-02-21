@@ -21,8 +21,6 @@ class ExchangeRateApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->seed(CurrenciesSeeder::class);
         $this->user = User::factory()->createOne();
     }
 

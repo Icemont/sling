@@ -47,7 +47,7 @@
                                         <td class="text-secondary text-nowrap w-1">{{ $client->created_at->format('d.m.Y H:i') }}</td>
                                         <td class="text-end text-nowrap">
                                             <a href="{{ route('clients.edit', ['client' => $client->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('Edit') }}">
-                                                <x-icon-edit />
+                                                <x-icon-edit class="text-red" />
                                             </a>
                                             <a class="ms-2" href="{{ route('clients.show', ['client' => $client->id]) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('Show') }}">
                                                 <x-icon-show />

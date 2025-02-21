@@ -1,28 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex">
-            <h2 class="page-title">
-                {{ __('Invoices') }}
-            </h2>
+            <ol class="page-title breadcrumb breadcrumb-arrows" aria-label="breadcrumbs">
+                <li class="breadcrumb-item"><a href="{{ route('invoices.index') }}">{{ __('Invoices') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('Creating an invoice for client ":client"', ['client' => $client->name]) }}</li>
+            </ol>
         </div>
     </x-slot>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <h4 class="alert-title">{{ __('New invoice was not added because there are errors in the form') }}
-                :</h4>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-errors :errors="$errors" title="{{ __('Invoice was not created because there are errors in the form') }}" />
     <div class="row row-cards">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">{{ __('Create an invoice for the client ":client"', ['client' => $client->name]) }}</h4>
-                </div>
                 <div class="card-body">
                     <form action="{{ route('invoices.store') }}" method="post">
                         @csrf
@@ -31,9 +19,7 @@
                             <div class="col-lg-8">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Product or Service Name') }}</label>
-                                    <input type="text" name="product_name" value="{{ old('product_name') }}"
-                                           class="form-control"
-                                           required>
+                                    <input type="text" name="product_name" value="{{ old('product_name') }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -41,16 +27,14 @@
                                     <label class="form-label">{{ __('Price') }}</label>
                                     <div class="row">
                                         <div class="col-7">
-                                            <input type="text" name="product_price" value="{{ old('product_price') }}"
-                                                   class="form-control"
-                                                   required>
+                                            <input type="text" name="product_price" value="{{ old('product_price') }}" class="form-control" required>
                                         </div>
                                         <div class="col-5">
-                                            <select id="currency" class="form-select" name="currency_id">
+                                            <select id="currency" class="form-select" name="currency">
                                                 @foreach(\App\Enums\Currency::cases() as $currency)
                                                     <x-option :value="$currency->value" name="{{ $currency->symbol() }} ({{ $currency->code() }})"
-                                                              data-code="{{ $currency->code() }}"
-                                                              :selected="old('currency_id', $user->currency_idx)"/>
+                                                              data-id="{{ $currency->value }}"
+                                                              :selected="old('currency', $user->currency->value)"/>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -62,16 +46,15 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Invoice Number') }}</label>
-                                    <input type="text" name="invoice_number" value="{{ old('invoice_number') ??
-$client->invoice_prefix . Str::padLeft($client->invoice_index, config('app.invoice_index_length'), '0') }}"
-                                           class="form-control" required>
+                                    <input type="text" name="invoice_number" value="{{
+                                        old('invoice_number') ?? $client->invoice_prefix . Str::padLeft($client->invoice_index, config('app.invoice_index_length'), '0')
+                                    }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label class="form-label required">{{ __('Invoice Date') }}</label>
-                                    <input type="text" class="form-control" id="invoice_date" name="invoice_date"
-                                           value="{{ old('invoice_date') ?? now()->format('Y-m-d') }}" required>
+                                    <input type="text" class="form-control" id="invoice_date" name="invoice_date" value="{{ old('invoice_date') ?? now()->format('Y-m-d') }}" required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -79,9 +62,7 @@ $client->invoice_prefix . Str::padLeft($client->invoice_index, config('app.invoi
                                     <label class="form-label required">{{ __('Payment Method') }}</label>
                                     <select class="form-select" name="payment_method_id">
                                         @foreach($payment_methods as $payment_method)
-                                            <option
-                                                value="{{ $payment_method->id }}"{!! $payment_method->id == old('payment_method_id')
-                                ? ' selected="selected"' : '' !!}>{{ $payment_method->name }}</option>
+                                            <x-option :value="$payment_method->id" :name="$payment_method->name" :selected="old('payment_method_id')"/>
                                         @endforeach
                                     </select>
                                 </div>
@@ -117,8 +98,7 @@ $client->invoice_prefix . Str::padLeft($client->invoice_index, config('app.invoi
                                             </button>
                                         </div>
                                     </label>
-                                    <input id="exchange_rate_input" type="text" class="form-control" name="exchange_rate"
-                                           value="{{ old('exchange_rate') }}">
+                                    <input id="exchange_rate_input" type="text" class="form-control" name="exchange_rate" value="{{ old('exchange_rate') }}">
                                 </div>
                             </div>
                         </div>
@@ -131,15 +111,12 @@ $client->invoice_prefix . Str::padLeft($client->invoice_index, config('app.invoi
                             </div>
                             <div class="form-footer text-end mt-lg-0">
                                 <button type="submit" class="btn btn-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="icon icon-tabler icon-tabler-file-plus"
-                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                         stroke="currentColor"
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                          fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
-                                        <path
-                                            d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
                                         <line x1="12" y1="11" x2="12" y2="17"></line>
                                         <line x1="9" y1="14" x2="15" y2="14"></line>
                                     </svg>
@@ -152,5 +129,5 @@ $client->invoice_prefix . Str::padLeft($client->invoice_index, config('app.invoi
             </div>
         </div>
     </div>
-    @include('invoices.partials.form-js', ['currency_id' => $user->currency_id])
+    @include('invoices.partials.form-js', ['currency_id' => $user->currency->value])
 </x-app-layout>

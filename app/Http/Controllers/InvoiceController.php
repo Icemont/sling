@@ -56,7 +56,7 @@ class InvoiceController extends Controller
      */
     public function store(InvoiceStoreRequest $request): RedirectResponse
     {
-        $invoice = $this->invoiceRepository->create($request);
+        $invoice = $this->invoiceRepository->create($request->getInvoicePayload());
 
         return redirect()
             ->route('invoices.index')
@@ -98,7 +98,7 @@ class InvoiceController extends Controller
     {
         $this->authorize('owner', $invoice);
 
-        $this->invoiceRepository->update($invoice, $request);
+        $this->invoiceRepository->update($invoice, $request->getInvoicePayload());
 
         return redirect()
             ->route('invoices.index')

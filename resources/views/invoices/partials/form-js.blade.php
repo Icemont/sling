@@ -23,7 +23,7 @@
         if ($('#is_paid').is(':checked')) {
             $("#paid-form").removeClass('d-none');
         }
-        if ($('#currency').val() != {{ $currency_id ?? '1' }}) {
+        if ($('#currency').val() != {{ $currency_id ?? \App\Enums\Currency::GEL->value }}) {
             $("#exchange-rate").removeClass('d-none');
         }
         $('#is_paid').click(function () {
@@ -34,7 +34,7 @@
             }
         });
         $('#currency').change(function () {
-            if (this.value == {{ $currency_id ?? '1' }}) {
+            if (this.value == {{ $currency_id ?? \App\Enums\Currency::GEL->value }}) {
                 $("#exchange-rate").addClass('d-none');
             } else {
                 $("#exchange-rate").removeClass('d-none');
@@ -45,9 +45,9 @@
             var spin = $('#exchange-rate-spinner');
             btn.addClass('d-none');
             spin.removeClass('d-none');
-            var code = $('#currency').find(':selected').data('code');
+            var currency_id = $('#currency').find(':selected').data('id');
             var date = $('#payment_date').val();
-            axios.get('/api/v1/exchange-rates/' + code + '/' + date)
+            axios.get('/api/v1/exchange-rates/' + currency_id + '/' + date)
                 .then(function (response) {
                     $('#exchange_rate_input').val(response.data.rate);
                 })
